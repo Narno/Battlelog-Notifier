@@ -1,0 +1,20 @@
+{
+    "extName": {
+        "message": "Battlelog Notifier"
+    },
+    "extDescription": {
+        "message": "Displays your Battlelog friends count (offline, online or palying)."
+    },
+    "browserActionDefaultTitle": {
+        "message": "$count$ Battlelog friend(s) online",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "7"
+            }
+        }
+    },
+    "browserActionErrorTitle": {
+        "message": "You should be logged into your Battlelog account"
+    }
+}
