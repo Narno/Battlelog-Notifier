@@ -4,8 +4,14 @@
   var colorOffline = [63, 59, 61, 255];
   var colorOnline  = [120, 199, 83, 255];
   var colorPlaying = [96, 192, 246, 255];
-  
-  
+
+  // Conditionally initialize the options.
+  if (!localStorage.isInitialized) {
+    localStorage.isActivated = true;
+    localStorage.frequency = 1;
+    localStorage.isInitialized = true;
+  }
+
   // XHR helper function
   var xhr = function () {
     var xhr = new XMLHttpRequest();
@@ -26,7 +32,6 @@
 
   // main function
   window.NotificationsCount = function (callback) {
-
     xhr('GET', JSON_URL, function (data) {
       var key;
       var friendsCount = 0;
@@ -39,9 +44,8 @@
       if (data === false) {
         callback(false);
       }
-      
+
       var json = JSON.parse(data);
-      
       if (json.type == 'success') {
         if (json.data.originavailable) {
           for(key in json.data.friendscomcenter) {
@@ -97,11 +101,10 @@
   }
 
   // update badge
-  function update() {
+  function updateBadge() {
     var color;
     NotificationsCount(function (count, status) {
       if (count !== false) {
-        console.log(status);
         color = colorOffline;
         if (status == 'playing') {
           color = colorPlaying;
@@ -109,24 +112,61 @@
         if (status == 'online') {
           color = colorOnline;
         }
-        render((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', count));
+        render((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, status]));
       } else {
         render('?', [190, 190, 190, 230], chrome.i18n.getMessage('browserActionErrorTitle'));
       }
     });
   }
 
+  function showNotification() {
+    NotificationsCount(function (count, status) {
+      var notification = webkitNotifications.createNotification(
+        'icon-48.png',
+        'Battlelog friends',
+        chrome.i18n.getMessage('browserActionDefaultTitle', [count, status])
+      );
+      notification.show();
+      setTimeout(function() {
+        notification.cancel();
+      },5000);
+    });
+  }
+  
+  function isBattlelogUrl(url) {
+    return url.indexOf(HOME_URL) == 0;
+  }
+
   // Chrome alarm
-  chrome.alarms.create({periodInMinutes: 1});
-  chrome.alarms.onAlarm.addListener(update);
+  chrome.alarms.create('badge', {periodInMinutes: 1});
+  if (JSON.parse(localStorage.isActivated) && localStorage.frequency) {
+    chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.frequency)});
+  }
+  chrome.alarms.onAlarm.addListener(function (alarm) {
+    if (alarm.name == 'badge') {
+      updateBadge();
+    }
+    if (alarm.name == 'notification') {
+      showNotification();
+    }
+  });
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-    chrome.tabs.create({
-      url: HOME_URL
+   // check if Battle is already open
+    chrome.tabs.getAllInWindow(undefined, function(tabs) {
+      for (var i = 0, tab; tab = tabs[i]; i++) {
+        if (tab.url && isBattlelogUrl(tab.url)) {
+          chrome.tabs.update(tab.id, {selected: true});
+          return;
+        }
+      }
+      chrome.tabs.create({url: HOME_URL});
     });
-    update();
+    // force update on click
+    updateBadge();
+    showNotification();
   });
 
-  update();
+  updateBadge();
 })();

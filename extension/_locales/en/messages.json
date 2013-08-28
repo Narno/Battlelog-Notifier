@@ -6,11 +6,15 @@
         "message": "Displays your Battlelog friends count (offline, online or playing)."
     },
     "browserActionDefaultTitle": {
-        "message": "$count$ Battlelog friend(s) online",
+        "message": "$count$ Battlelog friend(s) $status$",
         "placeholders": {
             "count": {
                 "content": "$1",
                 "example": "7"
+            },
+            "status": {
+                "content": "$2",
+                "example": "online"
             }
         }
     },
