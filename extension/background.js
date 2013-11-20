@@ -1,16 +1,17 @@
 (function () {
-  var JSON_URL = 'http://battlelog.battlefield.com/bf3/fr/comcenter/sync/';
-  var HOME_URL = 'http://battlelog.battlefield.com/bf3/';
-  var colorOffline = [63, 59, 61, 255];
-  var colorOnline  = [120, 199, 83, 255];
-  var colorPlaying = [96, 192, 246, 255];
-
   // Conditionally initialize the options.
   if (!localStorage.isInitialized) {
+    localStorage.game = 'bf4';
     localStorage.isActivated = true;
     localStorage.frequency = 1;
     localStorage.isInitialized = true;
   }
+
+  var HOME_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/';
+  var JSON_URL  = 'http://battlelog.battlefield.com/' + localStorage.game + '/comcenter/sync/';
+  var colorOffline = [63, 59, 61, 255];
+  var colorOnline  = [120, 199, 83, 255];
+  var colorPlaying = [96, 192, 246, 255];
 
   // XHR helper function
   var xhr = function () {
@@ -153,7 +154,7 @@
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-   // check if Battle is already open
+    // check if Battle is already open
     chrome.tabs.getAllInWindow(undefined, function(tabs) {
       for (var i = 0, tab; tab = tabs[i]; i++) {
         if (tab.url && isBattlelogUrl(tab.url)) {
