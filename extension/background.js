@@ -122,20 +122,39 @@
 
   function showNotification() {
     NotificationsCount(function (count, status) {
-      var notification = webkitNotifications.createNotification(
-        'icon-48.png',
-        'Battlelog friends',
-        chrome.i18n.getMessage('browserActionDefaultTitle', [count, status])
-      );
-      notification.show();
-      setTimeout(function() {
-        notification.cancel();
-      },5000);
+      var opt = {
+        type: "basic",
+        title: "Battlelog friends",
+        message: chrome.i18n.getMessage('browserActionDefaultTitle', [count, status]),
+        iconUrl: "icon-48.png",
+        buttons: [
+          { title: "Open Battlelog", iconUrl: "home-27.png" }, // http://glyphicons.com
+        ]
+      };
+      var notification = chrome.notifications.create('showFriends', opt, function() {
+        // auto clear after 5s
+        setTimeout(function() {
+          chrome.notifications.clear('showFriends', function(){});
+        }, 5000);
+      });
     });
   }
   
   function isBattlelogUrl(url) {
     return url.indexOf(HOME_URL) == 0;
+  }
+
+  function openBattlelogInTab() {
+    // check if Battle is already open
+    chrome.tabs.getAllInWindow(undefined, function(tabs) {
+      for (var i = 0, tab; tab = tabs[i]; i++) {
+        if (tab.url && isBattlelogUrl(tab.url)) {
+          chrome.tabs.update(tab.id, {selected: true});
+          return;
+        }
+      }
+      chrome.tabs.create({url: HOME_URL});
+    });
   }
 
   // Chrome alarm
@@ -154,19 +173,23 @@
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-    // check if Battle is already open
-    chrome.tabs.getAllInWindow(undefined, function(tabs) {
-      for (var i = 0, tab; tab = tabs[i]; i++) {
-        if (tab.url && isBattlelogUrl(tab.url)) {
-          chrome.tabs.update(tab.id, {selected: true});
-          return;
-        }
-      }
-      chrome.tabs.create({url: HOME_URL});
-    });
+    openBattlelogInTab();
     // force update on click
     updateBadge();
     showNotification();
+  });
+
+  
+  // notification action
+  chrome.notifications.onClicked.addListener(function () {
+    //console.log("The notification was clicked");
+    openBattlelogInTab();
+  });
+
+  // notification button action
+  chrome.notifications.onButtonClicked.addListener(function () {
+    //console.log("The notification button was clicked");
+    openBattlelogInTab();
   });
 
   updateBadge();
