@@ -1,25 +1,35 @@
-function ghost(isDeactivated) {
-	options.style.color = (isDeactivated ? 'graytext' : 'black');
-	options.frequency.disabled = isDeactivated;
-}
+(function () {
+  'use strict';
 
-window.addEventListener('load', function() {
-	options.isActivated.checked = JSON.parse(localStorage.isActivated);
-	options.frequency.value = localStorage.frequency;
-  options.game.value = localStorage.game;
+  document.addEventListener('DOMContentLoaded', function () {
+    var formGame = document.getElementById('game');
+    var successMessage = document.getElementById('success_message');
+    var successTimeout = null;
 
-  options.game.onchange = function() {
-    localStorage.game = options.game.value;
-  };
-	
-  if (!options.isActivated.checked) {
-    ghost(true);
-  }
-  options.isActivated.onchange = function() {
-    localStorage.isActivated = options.isActivated.checked;
-    ghost(!options.isActivated.checked);
-	};
-	options.frequency.onchange = function() {
-    localStorage.frequency = options.frequency.value;
-	};
-});
+    function loadSettings() {
+      if (localStorage.getItem('game') === null) {
+        formGame.value = 'bf4';
+      }
+      else {
+        formGame.value = localStorage.getItem('game');
+      }
+    }
+
+    loadSettings();
+
+    document.getElementById('save').addEventListener('click', function () {
+      localStorage.setItem('game', formGame.value);
+      chrome.runtime.sendMessage('updatebadge');
+      clearTimeout(successTimeout);
+      successMessage.classList.add('visible');
+      successTimeout = setTimeout(function() {
+        successMessage.classList.remove('visible');
+      }, 2000);
+    });
+
+    document.getElementById('reset').addEventListener('click', function () {
+      formGame.value = 'bf4';
+      //loadSettings();
+    });
+  });
+})();

@@ -1,4 +1,6 @@
 (function () {
+  'use strict';
+
   // Conditionally initialize the options.
   if (!localStorage.isInitialized) {
     localStorage.game = 'bf4';
@@ -159,16 +161,20 @@
 
   // Chrome alarm
   chrome.alarms.create('badge', {periodInMinutes: 1});
+  /*
   if (JSON.parse(localStorage.isActivated) && localStorage.frequency) {
     chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.frequency)});
   }
+  */
   chrome.alarms.onAlarm.addListener(function (alarm) {
     if (alarm.name == 'badge') {
       updateBadge();
     }
+    /*
     if (alarm.name == 'notification') {
       showNotification();
     }
+    */
   });
 
   // browser action
@@ -176,7 +182,7 @@
     openBattlelogInTab();
     // force update on click
     updateBadge();
-    showNotification();
+    //showNotification();
   });
 
   
@@ -190,6 +196,10 @@
   chrome.notifications.onButtonClicked.addListener(function () {
     //console.log("The notification button was clicked");
     openBattlelogInTab();
+  });
+
+  chrome.runtime.onMessage.addListener(function () {
+    updateBadge();
   });
 
   updateBadge();
