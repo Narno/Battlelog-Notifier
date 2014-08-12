@@ -34,7 +34,7 @@
   }();
 
   // main function
-  window.NotificationsCount = function (callback) {
+  window.FriendsCount = function (callback) {
     xhr('GET', JSON_URL, function (data) {
       var key;
       var friendsCount = 0;
@@ -106,7 +106,7 @@
   // update badge
   function updateBadge() {
     var color;
-    NotificationsCount(function (count, status) {
+    FriendsCount(function (count, status) {
       if (count !== false) {
         color = colorOffline;
         if (status == 'playing') {
@@ -122,8 +122,9 @@
     });
   }
 
+  /*
   function showNotification() {
-    NotificationsCount(function (count, status) {
+    FriendsCount(function (count, status) {
       var opt = {
         type: "basic",
         title: "Battlelog friends",
@@ -141,6 +142,7 @@
       });
     });
   }
+  */
   
   function isBattlelogUrl(url) {
     return url.indexOf(HOME_URL) == 0;
