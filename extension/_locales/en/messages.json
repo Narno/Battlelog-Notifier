@@ -20,5 +20,14 @@
     },
     "browserActionErrorTitle": {
         "message": "You should be logged into your Battlelog account"
+    },
+    "notificationMessage": {
+        "message": "You got $count$ new updates",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "7"
+            }
+        }
     }
 }

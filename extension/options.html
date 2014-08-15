@@ -8,18 +8,15 @@
       .chrome-bootstrap .frame .view {
         -webkit-margin-start: 170px
       }
-
       input[type='text'] {
         width: 350px;
       }
-
       #success_message {
         margin-top: 10px;
         padding: 5px 10px;
         opacity: 0;
         transition: opacity 0.5s ease-out;
       }
-
       #success_message.visible {
         opacity: 1;
       }
@@ -47,14 +44,37 @@
             
             <section>
               <h3>Game</h3>
-              <p>Define the default game page</p>
-              <!--<label for="game">Game</label>-->
+              <p>Define the default game page.</p>
+              <label for="game">Dedault game</label>
               <select id="game" name="game" autofocus>
                 <option value="bf4">BF4</option>
                 <option value="bf3">BF3</option>
                 <option value="bfh">Hardline</option>
                 <option value="mohw">Medal of Honor</option>
               </select>
+            </section>
+
+            <section>
+              <h3>Updates</h3>
+              <p>Show notifications when you get new updates.</p>
+              <div class="checkbox">
+                <input type="checkbox" id="notifIsActivated" name="isActivated" checked>
+                <span>Activated</span>
+              </div>
+              <label for="notifFrequency">Frequency</label>
+              <select id="notifFrequency" name="frequency">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+                <option>25</option>
+                <option>30</option>
+              </select>
+              minute(s).
             </section>
             
             <div class="controls">

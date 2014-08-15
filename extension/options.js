@@ -2,23 +2,43 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', function () {
-    var formGame = document.getElementById('game');
+    var inputGame = document.getElementById('game');
+    var inputNotifIsActivated = document.getElementById('notifIsActivated');
+    var inputNotifFrequency = document.getElementById('notifFrequency');
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
+    // Laod settings
     function loadSettings() {
+      // game
       if (localStorage.getItem('game') === null) {
-        formGame.value = 'bf4';
+        inputGame.value = 'bf4';
       }
       else {
-        formGame.value = localStorage.getItem('game');
+        inputGame.value = localStorage.getItem('game');
+      }
+      // notifIsActivated
+      if (localStorage.getItem('notifIsActivated') === null) {
+        inputNotifIsActivated.value = '1';
+      }
+      else {
+        inputNotifIsActivated.value = localStorage.getItem('notifIsActivated');
+      }
+      // notifFrequency
+      if (localStorage.getItem('notifFrequency') === null) {
+        inputNotifFrequency.value = '1';
+      }
+      else {
+        inputNotifFrequency.value = localStorage.getItem('notifFrequency');
       }
     }
-
     loadSettings();
 
+    // Save
     document.getElementById('save').addEventListener('click', function () {
-      localStorage.setItem('game', formGame.value);
+      localStorage.setItem('game', inputGame.value);
+      localStorage.setItem('notifIsActivated', inputNotifIsActivated.value);
+      localStorage.setItem('notifFrequency', inputNotifFrequency.value);
       chrome.runtime.sendMessage('updatebadge');
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');
@@ -27,8 +47,10 @@
       }, 2000);
     });
 
+    // Reset
     document.getElementById('reset').addEventListener('click', function () {
-      formGame.value = 'bf4';
+      inputGame.value = 'bf4';
+      inputNotifIsActivated.value = '1';
       //loadSettings();
     });
   });

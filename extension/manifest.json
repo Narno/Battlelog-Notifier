@@ -1,7 +1,7 @@
 {
     "name": "__MSG_extName__",
     "description": "__MSG_extDescription__",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "background": {
         "persistent": false,
         "scripts": [
@@ -13,7 +13,8 @@
         "alarms",
         "tabs",
         "*://battlelog.battlefield.com/*",
-        "notifications"
+        "notifications",
+        "https://raw.githubusercontent.com/*"
     ],
     "browser_action": {
         "default_icon": "icon-19.png"
