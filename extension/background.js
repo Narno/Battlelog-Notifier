@@ -6,13 +6,14 @@
     localStorage.game = 'bf4';
     localStorage.notifIsActivated = true;
     localStorage.notifFrequency = 1;
+    localStorage.notifications = 0;
   });
 
   var HOME_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/';
   var UPDATES_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/';
   var FRIENDS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/comcenter/sync/';
-  //var NOTIFICATIONS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/loadNotifications/';
-  var NOTIFICATIONS_URL_JSON  = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/prototype/data/notifications_unread_3.json';
+  var NOTIFICATIONS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/loadNotifications/';
+  //var NOTIFICATIONS_URL_JSON  = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/prototype/data/notifications_unread_3.json';
 
   var colorOffline = [63, 59, 61, 255];
   var colorOnline  = [120, 199, 83, 255];
@@ -148,7 +149,7 @@
   function showNotification() {
     NotificationsCount(function (count) {
       //console.log(count); // debug
-      if (count >= localStorage.getItem('notifications')) {
+      if (count > localStorage.getItem('notifications')) {
         var opt = {
           type: "basic",
           title: "Battlelog updates",
@@ -233,11 +234,15 @@
   
   // notification action
   chrome.notifications.onClicked.addListener(function () {
-    openBattlelogHomeInTab();
+    // open Battlelog
+    //openBattlelogHomeInTab();
+    // close notification
+    chrome.notifications.clear('showNotification', function(){});
   });
 
   // notification button action
   chrome.notifications.onButtonClicked.addListener(function () {
+    // open Battlelog updates
     openBattlelogUpdatesInTab();
   });
 
