@@ -235,7 +235,7 @@
   // notification action
   chrome.notifications.onClicked.addListener(function () {
     // open Battlelog
-    //openBattlelogHomeInTab();
+    openBattlelogHomeInTab();
     // close notification
     chrome.notifications.clear('showNotification', function(){});
   });
@@ -244,6 +244,8 @@
   chrome.notifications.onButtonClicked.addListener(function () {
     // open Battlelog updates
     openBattlelogUpdatesInTab();
+    // close notification
+    chrome.notifications.clear('showNotification', function(){});
   });
 
   // message
