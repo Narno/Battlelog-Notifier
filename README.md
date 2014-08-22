@@ -4,6 +4,7 @@ Battlelog Notifier
 Google Chrome extension that displays your [Battlelog](http://battlelog.battlefield.com) friends count (offline, online or playing).
 
 ![Battlelog Notifier screenshot](https://raw.github.com/Narno/Battlelog-Notifier/master/doc/screenshot.png "Battlelog Notifier screenshot")
+![Battlelog Notifier options screenshot](https://raw.github.com/Narno/Battlelog-Notifier/master/doc/screenshot_options.png "Battlelog Notifier options screenshot")
 
 Installation
 ------------
