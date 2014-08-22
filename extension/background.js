@@ -4,7 +4,7 @@
   // Initialize options
   chrome.runtime.onInstalled.addListener(function () {
     localStorage.game = 'bf4';
-    localStorage.notifIsActivated = true;
+    localStorage.notifIsActivated = false;
     localStorage.notifFrequency = 1;
   });
 
@@ -217,7 +217,7 @@
   chrome.alarms.create('badge', {periodInMinutes: 1});
   // notifications
   if (chrome.notifications
-    && JSON.parse(localStorage.notifIsActivated)
+    && localStorage.notifIsActivated === true
     && localStorage.notifFrequency)
   {
     chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifFrequency)});
@@ -236,7 +236,9 @@
     // force badge update on click
     updateBadge();
     // force show notifications on click
-    if (chrome.notifications) {
+    if (chrome.notifications
+      && localStorage.notifIsActivated === true)
+    {
       showNotification();   
     }
     // open Battlelog
