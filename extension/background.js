@@ -136,7 +136,7 @@
   function updateBadge() {
     var color;
     FriendsCount(function (count, status) {
-      console.log('friends count: ' + count); // debug
+      //console.log('friends count: ' + count); // debug
       if (count !== false) {
         color = colorOffline;
         if (status == 'playing') {
@@ -154,7 +154,7 @@
 
   function showNotification() {
     NotificationsCount(function (count) {
-      console.log('notifications count: ' + count); // debug
+      //console.log('notifications count: ' + count); // debug
       if (count !== false && count > 0) {
         var opt = {
           type: "basic",
@@ -255,7 +255,7 @@
     });
     // notification button(s) action
     chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
-      console.log('button index: ' + buttonIndex); // debug
+      //console.log('button index: ' + buttonIndex); // debug
       if (buttonIndex == 1) {
         // open Battlelog updates
         openBattlelogUpdatesInTab();  
