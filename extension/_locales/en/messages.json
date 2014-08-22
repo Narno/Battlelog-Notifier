@@ -21,13 +21,22 @@
     "browserActionErrorTitle": {
         "message": "You should be logged into your Battlelog account"
     },
+    "notificationTitle": {
+        "message": "Battlelog notifications"
+    },
     "notificationMessage": {
-        "message": "You got $count$ new updates",
+        "message": "You got $count$ new notifications",
         "placeholders": {
             "count": {
                 "content": "$1",
                 "example": "7"
             }
         }
+    },
+    "notificationButton1Title": {
+        "message": "Dismiss"
+    },
+    "notificationButton2Title": {
+        "message": "View all updates"
     }
 }

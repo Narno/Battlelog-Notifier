@@ -6,14 +6,13 @@
     localStorage.game = 'bf4';
     localStorage.notifIsActivated = true;
     localStorage.notifFrequency = 1;
-    localStorage.notifications = 0;
   });
 
   var HOME_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/';
   var UPDATES_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/';
   var FRIENDS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/comcenter/sync/';
   var NOTIFICATIONS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/loadNotifications/';
-  //var NOTIFICATIONS_URL_JSON  = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/prototype/data/notifications_unread_3.json';
+  //var NOTIFICATIONS_URL_JSON  = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/prototype/data/notifications_unread_3.json'; // debug
 
   var colorOffline = [63, 59, 61, 255];
   var colorOnline  = [120, 199, 83, 255];
@@ -52,7 +51,13 @@
         callback(false);
       }
 
-      var json = JSON.parse(data);
+      try {
+        var json = JSON.parse(data);
+      } catch (e) {
+        console.error("Parsing error:", e);
+        callback(false);
+      }
+
       if (json.type == 'success') {
         if (json.data.originavailable) {
           for(key in json.data.friendscomcenter) {
@@ -131,6 +136,7 @@
   function updateBadge() {
     var color;
     FriendsCount(function (count, status) {
+      console.log('friends count: ' + count); // debug
       if (count !== false) {
         color = colorOffline;
         if (status == 'playing') {
@@ -148,15 +154,16 @@
 
   function showNotification() {
     NotificationsCount(function (count) {
-      //console.log(count); // debug
-      if (count > localStorage.getItem('notifications')) {
+      console.log('notifications count: ' + count); // debug
+      if (count !== false && count > 0) {
         var opt = {
           type: "basic",
-          title: "Battlelog updates",
+          title: chrome.i18n.getMessage('notificationTitle'),
           message: chrome.i18n.getMessage('notificationMessage', [count]),
           iconUrl: "icon-48.png",
           buttons: [
-            { title: "View all updates", iconUrl: "glyphicons_266_flag.png" },
+            { title: chrome.i18n.getMessage('notificationButton1Title'), iconUrl: "glyphicons_206_ok_2.png" },
+            { title: chrome.i18n.getMessage('notificationButton2Title'), iconUrl: "glyphicons_266_flag.png" },
           ]
         };
         var notification = chrome.notifications.create('showNotification', opt, function() {
@@ -168,7 +175,6 @@
           */
         });
       }
-      localStorage.setItem('notifications', count);
     });
   }
   
@@ -210,7 +216,10 @@
   // badge
   chrome.alarms.create('badge', {periodInMinutes: 1});
   // notifications
-  if (JSON.parse(localStorage.notifIsActivated) && localStorage.notifFrequency) {
+  if (chrome.notifications
+    && JSON.parse(localStorage.notifIsActivated)
+    && localStorage.notifFrequency)
+  {
     chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifFrequency)});
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
@@ -227,26 +236,32 @@
     // force badge update on click
     updateBadge();
     // force show notifications on click
-    showNotification();
+    if (chrome.notifications) {
+      showNotification();   
+    }
     // open Battlelog
     openBattlelogHomeInTab();
   });
   
-  // notification action
-  chrome.notifications.onClicked.addListener(function () {
-    // open Battlelog
-    openBattlelogHomeInTab();
-    // close notification
-    chrome.notifications.clear('showNotification', function(){});
-  });
-
-  // notification button action
-  chrome.notifications.onButtonClicked.addListener(function () {
-    // open Battlelog updates
-    openBattlelogUpdatesInTab();
-    // close notification
-    chrome.notifications.clear('showNotification', function(){});
-  });
+  if (chrome.notifications) {
+    // notification action
+    chrome.notifications.onClicked.addListener(function () {
+      // open Battlelog
+      openBattlelogHomeInTab();
+      // close notification
+      chrome.notifications.clear('showNotification', function(){});
+    });
+    // notification button(s) action
+    chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
+      console.log('button index: ' + buttonIndex); // debug
+      if (buttonIndex == 1) {
+        // open Battlelog updates
+        openBattlelogUpdatesInTab();  
+      }
+      // close notification
+      chrome.notifications.clear('showNotification', function(){});
+    });  
+  }
 
   // message
   chrome.runtime.onMessage.addListener(function () {
