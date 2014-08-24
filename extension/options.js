@@ -51,7 +51,6 @@
     document.getElementById('reset').addEventListener('click', function () {
       inputGame.value = 'bf4';
       inputNotifIsActivated.value = '0';
-      //loadSettings();
     });
   });
 })();
