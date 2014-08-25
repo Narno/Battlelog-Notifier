@@ -8,10 +8,22 @@
     localStorage.notifFrequency = 1;
   });
 
-  var HOME_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/';
-  var UPDATES_URL = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/';
-  var FRIENDS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/comcenter/sync/';
-  var NOTIFICATIONS_URL_JSON  = 'http://battlelog.battlefield.com/' + localStorage.game + '/updates/loadNotifications/';
+  // HOME_URL
+  function getHomeUrl(game) {
+    return 'http://battlelog.battlefield.com/' + game + '/';
+  }
+  // UPDATES_URL
+  function getUpdateUrl(game) {
+    return 'http://battlelog.battlefield.com/' + game + '/updates/';
+  }
+  // FRIENDS_URL_JSON
+  function getFriendsUrlJson(game) {
+    return 'http://battlelog.battlefield.com/' + game + '/comcenter/sync/';
+  }
+  // NOTIFICATIONS_URL_JSON
+  function getNotificationsUrlJson(game) {
+    return 'http://battlelog.battlefield.com/' + game + '/updates/loadNotifications/';
+  }
 
   var colorOffline = [63, 59, 61, 255];
   var colorOnline  = [120, 199, 83, 255];
@@ -37,7 +49,7 @@
 
   // main function
   window.FriendsCount = function (callback) {
-    xhr('GET', FRIENDS_URL_JSON, function (data) {
+    xhr('GET', getFriendsUrlJson(localStorage.game), function (data) {
       var key;
       var friendsCount = 0;
       var friendsOnlineCount = 0;
@@ -99,7 +111,7 @@
   };
 
   window.NotificationsCount = function (callback) {
-    xhr('GET', NOTIFICATIONS_URL_JSON, function (data) {
+    xhr('GET', getNotificationsUrlJson(localStorage.game), function (data) {
       var count = '0';
 
       // no data
@@ -179,11 +191,11 @@
   }
   
   function isBattlelogUrl(url) {
-    return url.indexOf(HOME_URL) == 0;
+    return url.indexOf(getHomeUrl(localStorage.game)) == 0;
   }
 
   function isBattlelogUpdatesUrl(url) {
-    return url.indexOf(UPDATES_URL) == 0;
+    return url.indexOf(getUpdateUrl(localStorage.game)) == 0;
   }
 
   function openBattlelogHomeInTab() {
@@ -195,7 +207,7 @@
           return;
         }
       }
-      chrome.tabs.create({url: HOME_URL});
+      chrome.tabs.create({url: getHomeUrl(localStorage.game)});
     });
   }
 
@@ -208,7 +220,7 @@
           return;
         }
       }
-      chrome.tabs.create({url: UPDATES_URL});
+      chrome.tabs.create({url: getUpdateUrl(localStorage.game)});
     });
   }
 
