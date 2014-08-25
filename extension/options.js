@@ -19,7 +19,7 @@
       }
       // notifIsActivated
       if (localStorage.getItem('notifIsActivated') === null) {
-        inputNotifIsActivated.value = '0';
+        inputNotifIsActivated.checked = false;
       }
       else {
         inputNotifIsActivated.checked = localStorage.getItem('notifIsActivated');
@@ -51,7 +51,8 @@
     // Reset
     document.getElementById('reset').addEventListener('click', function () {
       inputGame.value = 'bf4';
-      inputNotifIsActivated.value = '0';
+      inputNotifIsActivated.checked = false;
+      inputNotifFrequency.value = '1';
     });
   });
 })();
