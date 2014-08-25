@@ -22,7 +22,7 @@
         inputNotifIsActivated.value = '0';
       }
       else {
-        inputNotifIsActivated.value = localStorage.getItem('notifIsActivated');
+        inputNotifIsActivated.checked = localStorage.getItem('notifIsActivated');
       }
       // notifFrequency
       if (localStorage.getItem('notifFrequency') === null) {
@@ -37,7 +37,8 @@
     // Save
     document.getElementById('save').addEventListener('click', function () {
       localStorage.setItem('game', inputGame.value);
-      localStorage.setItem('notifIsActivated', inputNotifIsActivated.value);
+      //console.log('inputNotifIsActivated.checked:' + inputNotifIsActivated.checked); // debug
+      localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
       localStorage.setItem('notifFrequency', inputNotifFrequency.value);
       chrome.runtime.sendMessage('updatebadge');
       clearTimeout(successTimeout);
