@@ -1,6 +1,7 @@
 Thumbs.db
 .DS_Store
 
+package/*
 *.crx
 *.pem
 *.zip

@@ -27,7 +27,7 @@
 
   var colorOffline = [63, 59, 61, 255];
   var colorOnline  = [120, 199, 83, 255];
-  var colorPlaying = [96, 192, 246, 255];
+  var colorIngame  = [96, 192, 246, 255];
 
   // XHR helper function
   var xhr = function () {
@@ -53,7 +53,7 @@
       var key;
       var friendsCount = 0;
       var friendsOnlineCount = 0;
-      var friendsPlayingCount = 0;
+      var friendsIngameCount = 0;
       var count = '0';
       var status;
 
@@ -77,14 +77,14 @@
               if (json.data.friendscomcenter[key].presence.isOnline) {
                 friendsOnlineCount++;
               }
-              if (json.data.friendscomcenter[key].presence.isPlaying) {
-                friendsPlayingCount++;
+              if (json.data.friendscomcenter[key].presence.isIngame) {
+                friendsIngameCount++;
               }
             }
           }
-          if (friendsPlayingCount > 0) {
-            count = friendsPlayingCount.toString();
-            status = 'playing';
+          if (friendsIngameCount > 0) {
+            count = friendsIngameCount.toString();
+            status = 'in game';
           }
           else {
             if (friendsOnlineCount > 0) {
@@ -151,8 +151,8 @@
       //console.log('friends count: ' + count); // debug
       if (count !== false) {
         color = colorOffline;
-        if (status == 'playing') {
-          color = colorPlaying;
+        if (status == 'ingame') {
+          color = colorIngame;
         }
         if (status == 'online') {
           color = colorOnline;

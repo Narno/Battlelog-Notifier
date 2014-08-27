@@ -3,7 +3,7 @@
         "message": "Battlelog Notifier"
     },
     "extDescription": {
-        "message": "Displays your Battlelog friends count (offline, online or playing)."
+        "message": "Displays the count of your Battlelog friends in the extension's badge, by status: in game, online or offline."
     },
     "browserActionDefaultTitle": {
         "message": "$count$ friend(s) $status$",
