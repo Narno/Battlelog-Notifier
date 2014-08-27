@@ -174,11 +174,23 @@
           message: chrome.i18n.getMessage('notificationMessage', [count]),
           iconUrl: "icon-48.png",
           buttons: [
-            { title: chrome.i18n.getMessage('notificationButton1Title'), iconUrl: "glyphicons_206_ok_2.png" },
-            { title: chrome.i18n.getMessage('notificationButton2Title'), iconUrl: "glyphicons_266_flag.png" },
+            { title: chrome.i18n.getMessage('notificationButton2Title') },
           ]
         };
+        var optOpera = {
+          type: "basic",
+          title: chrome.i18n.getMessage('notificationTitle'),
+          message: chrome.i18n.getMessage('notificationMessage', [7]),
+          iconUrl: "icon-48.png"
+        };
         var notification = chrome.notifications.create('showNotification', opt, function() {
+          if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError.message);
+            if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
+              var notification = chrome.notifications.create('showNotification', optOpera, function() {});
+            }
+            return;
+          }
           // auto clear after 5s
           /*
           setTimeout(function() {
@@ -261,14 +273,17 @@
     // notification button(s) action
     chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
       //console.log('button index: ' + buttonIndex); // debug
-      if (buttonIndex == 1) {
-        openBattlelogUpdatesInTab();  
+      switch (buttonIndex) {
+        case 0:
+          openBattlelogUpdatesInTab();
+          break;
+        default:
+          chrome.notifications.clear('showNotification', function(){});
       }
-      chrome.notifications.clear('showNotification', function(){});
     });  
   }
 
-  // message
+  // on message update badge
   chrome.runtime.onMessage.addListener(function () {
     //console.log('onMessage event'); // debug
     updateBadge();

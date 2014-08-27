@@ -22,10 +22,10 @@
         "message": "You should be logged into your Battlelog account"
     },
     "notificationTitle": {
-        "message": "Battlelog notifications"
+        "message": "Battlelog updates"
     },
     "notificationMessage": {
-        "message": "You got $count$ new notifications",
+        "message": "You got $count$ new updates",
         "placeholders": {
             "count": {
                 "content": "$1",

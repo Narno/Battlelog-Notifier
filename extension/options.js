@@ -1,6 +1,28 @@
 (function () {
   'use strict';
 
+  $(function() {
+    $('.menu a').click(function(ev) {
+      ev.preventDefault();
+      var selected = 'selected';
+      $('.mainview > *').removeClass(selected);
+      $('.menu li').removeClass(selected);
+      setTimeout(function() {
+        $('.mainview > *:not(.selected)').css('display', 'none');
+      }, 100);
+      $(ev.currentTarget).parent().addClass(selected);
+      var currentView = $($(ev.currentTarget).attr('href'));
+      currentView.css('display', 'block');
+      setTimeout(function() {
+        currentView.addClass(selected);
+      }, 0);
+      setTimeout(function() {
+        $('body')[0].scrollTop = 0;
+      }, 200);
+    });
+    $('.mainview > *:not(.selected)').css('display', 'none');
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
     var inputGame = document.getElementById('game');
     var inputNotifIsActivated = document.getElementById('notifIsActivated');
@@ -8,8 +30,8 @@
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
-    // Laod settings
-    function loadSettings() {
+    // Laod options
+    function loadOptions() {
       // game
       if (localStorage.getItem('game') === null) {
         inputGame.value = 'bf4';
@@ -32,10 +54,20 @@
         inputNotifFrequency.value = localStorage.getItem('notifFrequency');
       }
     }
-    loadSettings();
+    loadOptions();
 
     // Save
-    document.getElementById('save').addEventListener('click', function () {
+    document.getElementById('game').addEventListener('change', function () {
+      saveOptions();
+    });
+    document.getElementById('notifIsActivated').addEventListener('change', function () {
+      saveOptions();
+    });
+    document.getElementById('notifFrequency').addEventListener('change', function () {
+      saveOptions();
+    });
+
+    function saveOptions() {
       localStorage.setItem('game', inputGame.value);
       //console.log('inputNotifIsActivated.checked:' + inputNotifIsActivated.checked); // debug
       localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
@@ -46,13 +78,37 @@
       successTimeout = setTimeout(function() {
         successMessage.classList.remove('visible');
       }, 2000);
-    });
+    }
 
-    // Reset
-    document.getElementById('reset').addEventListener('click', function () {
-      inputGame.value = 'bf4';
-      inputNotifIsActivated.checked = false;
-      inputNotifFrequency.value = '1';
+    // Notification test
+    document.getElementById('notifTest').addEventListener('click', function () {
+      if (chrome.notifications) {
+        //console.log('chrome.notifications'); // debug
+        var opt = {
+          type: "basic",
+          title: chrome.i18n.getMessage('notificationTitle'),
+          message: chrome.i18n.getMessage('notificationMessage', [7]),
+          iconUrl: "icon-48.png",
+          buttons: [
+            { title: chrome.i18n.getMessage('notificationButton2Title') },
+          ]
+        };
+        var optOpera = {
+          type: "basic",
+          title: chrome.i18n.getMessage('notificationTitle'),
+          message: chrome.i18n.getMessage('notificationMessage', [7]),
+          iconUrl: "icon-48.png"
+        };
+        var notification = chrome.notifications.create('showNotification', opt, function() {
+          if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError.message);
+            if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
+              var notification = chrome.notifications.create('showNotification', optOpera, function() {});
+            }
+            return;
+          }
+        });
+      }
     });
   });
 })();
