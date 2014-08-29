@@ -1,6 +1,7 @@
 (function () {
   'use strict';
 
+  // DOM / CSS handling with zeptojs
   $(function() {
     $('.menu a').click(function(ev) {
       ev.preventDefault();
@@ -44,7 +45,7 @@
         inputNotifIsActivated.checked = false;
       }
       else {
-        inputNotifIsActivated.checked = localStorage.getItem('notifIsActivated');
+        inputNotifIsActivated.checked = (localStorage.getItem('notifIsActivated') === 'true');
       }
       // notifFrequency
       if (localStorage.getItem('notifFrequency') === null) {
