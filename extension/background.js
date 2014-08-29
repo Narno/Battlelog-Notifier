@@ -238,12 +238,6 @@
 
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
-  
-  // debug
-  console.log('chrome.notifications: ' + chrome.notifications);
-  console.log('localStorage.notifIsActivated: ' + localStorage.notifIsActivated);
-  console.log('localStorage.notifFrequency: ' + localStorage.notifFrequency);
-
   if (chrome.notifications
     && localStorage.notifIsActivated === 'true'
     && localStorage.notifFrequency)
