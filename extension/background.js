@@ -77,14 +77,14 @@
               if (json.data.friendscomcenter[key].presence.isOnline) {
                 friendsOnlineCount++;
               }
-              if (json.data.friendscomcenter[key].presence.isIngame) {
+              if (json.data.friendscomcenter[key].presence.isPlaying) {
                 friendsIngameCount++;
               }
             }
           }
           if (friendsIngameCount > 0) {
             count = friendsIngameCount.toString();
-            status = 'in game';
+            status = 'ingame';
           }
           else {
             if (friendsOnlineCount > 0) {
