@@ -241,7 +241,7 @@
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
     if (alarm.name == 'badge') {
-      updateBadge();
+      chrome.runtime.sendMessage('updatebadge');
     }
     if (alarm.name == 'notification') {
       showNotification();
@@ -250,7 +250,7 @@
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-    updateBadge();
+    chrome.runtime.sendMessage('updatebadge');
     if (chrome.notifications
       && localStorage.notifIsActivated === true)
     {
@@ -300,8 +300,10 @@
   });
 
   // on message update badge
-  chrome.runtime.onMessage.addListener(function () {
-    //console.log('onMessage event'); // debug
-    updateBadge();
+  chrome.runtime.onMessage.addListener(function (message) {
+    //console.log('message: ' + '"' + message + '"'); // debug
+    if (message == 'updatebadge') {
+      updateBadge();
+    }
   });
 })();
