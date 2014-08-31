@@ -1,13 +1,6 @@
 (function () {
   'use strict';
 
-  // Initialize options
-  chrome.runtime.onInstalled.addListener(function () {
-    localStorage.game = 'bf4';
-    localStorage.notifIsActivated = false;
-    localStorage.notifFrequency = 1;
-  });
-
   // HOME_URL
   function getHomeUrl(game) {
     return 'http://battlelog.battlefield.com/' + game + '/';
@@ -47,7 +40,7 @@
     };
   }();
 
-  // main function
+  // Friends count function
   window.FriendsCount = function (callback) {
     xhr('GET', getFriendsUrlJson(localStorage.game), function (data) {
       var key;
@@ -67,6 +60,7 @@
       } catch (e) {
         console.error("Parsing error:", e);
         callback(false);
+        return;
       }
 
       if (json.type == 'success') {
@@ -110,6 +104,7 @@
     });
   };
 
+  // Notifications count function
   window.NotificationsCount = function (callback) {
     xhr('GET', getNotificationsUrlJson(localStorage.game), function (data) {
       var count = '0';
@@ -283,11 +278,30 @@
     });  
   }
 
+  // Check if new version is available
+  chrome.runtime.onUpdateAvailable.addListener(function (details) {    
+    console.log("updating to version " + details.version);
+    chrome.runtime.reload();
+  });
+  // Check whether new version is installed
+  chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason == 'install') {
+      console.log("first install");
+      // Initialize options
+      localStorage.game = 'bf4';
+      localStorage.notifIsActivated = false;
+      localStorage.notifFrequency = 1;
+    }
+    else if (details.reason == 'update') {
+      var version = chrome.runtime.getManifest().version;
+      console.log("updated from " + details.previousVersion + " to " + version);
+    }
+    chrome.runtime.sendMessage('updatebadge');
+  });
+
   // on message update badge
   chrome.runtime.onMessage.addListener(function () {
     //console.log('onMessage event'); // debug
     updateBadge();
   });
-
-  updateBadge();
 })();
