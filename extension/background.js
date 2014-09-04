@@ -160,6 +160,11 @@
   }
 
   function showNotification() {
+    if (!chrome.notifications
+      || localStorage.notifIsActivated != 'true')
+    {
+      return;
+    }
     NotificationsCount(function (count) {
       //console.log('notifications count: ' + count); // debug
       if (count !== false && count > 0) {
@@ -233,8 +238,7 @@
 
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
-  if (chrome.notifications
-    && localStorage.notifIsActivated === 'true'
+  if (localStorage.notifIsActivated == 'true'
     && localStorage.notifFrequency)
   {
     chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifFrequency)});
@@ -251,15 +255,11 @@
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
     chrome.runtime.sendMessage('updatebadge');
-    if (chrome.notifications
-      && localStorage.notifIsActivated === true)
-    {
-      showNotification();   
-    }
+    chrome.runtime.sendMessage('shownotification');
     openBattlelogHomeInTab();
   });
-  
-  if (chrome.notifications) {
+
+  if (chrome.notifications) { // Opera
     // notification action
     chrome.notifications.onClicked.addListener(function () {
       openBattlelogHomeInTab();
@@ -275,7 +275,7 @@
         default:
           chrome.notifications.clear('showNotification', function(){});
       }
-    });  
+    });
   }
 
   // Check if new version is available
@@ -302,8 +302,13 @@
   // on message update badge
   chrome.runtime.onMessage.addListener(function (message) {
     //console.log('message: ' + '"' + message + '"'); // debug
-    if (message == 'updatebadge') {
-      updateBadge();
+    switch (message) {
+      case 'updatebadge':
+        updateBadge();
+        break;
+      case 'shownotification':
+        showNotification();
+        break;
     }
   });
 })();
