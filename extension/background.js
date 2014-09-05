@@ -1,44 +1,22 @@
 (function () {
   'use strict';
 
-  // HOME_URL
-  function getHomeUrl(game) {
-    return 'http://battlelog.battlefield.com/' + game + '/';
-  }
-  // UPDATES_URL
-  function getUpdateUrl(game) {
-    return 'http://battlelog.battlefield.com/' + game + '/updates/';
-  }
-  // FRIENDS_URL_JSON
-  function getFriendsUrlJson(game) {
-    return 'http://battlelog.battlefield.com/' + game + '/comcenter/sync/';
-  }
-  // NOTIFICATIONS_URL_JSON
-  function getNotificationsUrlJson(game) {
-    return 'http://battlelog.battlefield.com/' + game + '/updates/loadNotifications/';
-  }
+  /**
+   * Config
+   */
+
+  var BASE_URL = 'http://battlelog.battlefield.com/';
+  var UPDATES_PATH = 'updates/';
+  var COMCENTER_PATH = 'comcenter/sync/';
+  var NOTIFICATIONS_PATH = 'updates/loadNotifications/';
 
   var colorOffline = [63, 59, 61, 255];
   var colorOnline  = [120, 199, 83, 255];
   var colorIngame  = [96, 192, 246, 255];
 
-  // XHR helper function
-  var xhr = function () {
-    var xhr = new XMLHttpRequest();
-    return function(method, url, callback) {
-      xhr.onreadystatechange = function () {
-        // request finished and response is ready
-        if (xhr.readyState === 4) {
-          if (xhr.status !== 200) {
-            callback(false);
-          }
-          callback(xhr.responseText);
-        }
-      };
-      xhr.open(method, url);
-      xhr.send();
-    };
-  }();
+  /**
+   * Main functions
+   */
 
   // Friends count function
   window.FriendsCount = function (callback) {
@@ -50,7 +28,6 @@
       var count = '0';
       var status;
 
-      // no data
       if (data === false) {
         callback(false);
       }
@@ -109,7 +86,6 @@
     xhr('GET', getNotificationsUrlJson(localStorage.game), function (data) {
       var count = '0';
 
-      // no data
       if (data === false) {
         callback(false);
       }
@@ -122,19 +98,6 @@
       else {
         callback(false);
       }
-    });
-  }
-
-  // badge renderer
-  function render(badge, color, title) {
-    chrome.browserAction.setBadgeText({
-      text: badge
-    });
-    chrome.browserAction.setBadgeBackgroundColor({
-      color: color
-    });
-    chrome.browserAction.setTitle({
-      title: title
     });
   }
 
@@ -152,9 +115,9 @@
         if (status == 'online') {
           color = colorOnline;
         }
-        render((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, status]));
+        renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, status]));
       } else {
-        render('?', [190, 190, 190, 230], chrome.i18n.getMessage('browserActionErrorTitle'));
+        renderBadge('?', [190, 190, 190, 230], chrome.i18n.getMessage('browserActionErrorTitle'));
       }
     });
   }
@@ -168,40 +131,121 @@
     NotificationsCount(function (count) {
       //console.log('notifications count: ' + count); // debug
       if (count !== false && count > 0) {
-        var opt = {
-          type: "basic",
-          title: chrome.i18n.getMessage('notificationTitle'),
-          message: chrome.i18n.getMessage('notificationMessage', [count]),
-          iconUrl: "icon-48.png",
-          buttons: [
-            { title: chrome.i18n.getMessage('notificationButton2Title') },
-          ]
-        };
-        var optOpera = {
-          type: "basic",
-          title: chrome.i18n.getMessage('notificationTitle'),
-          message: chrome.i18n.getMessage('notificationMessage', [7]),
-          iconUrl: "icon-48.png"
-        };
-        var notification = chrome.notifications.create('showNotification', opt, function() {
-          if (chrome.runtime.lastError) {
-            console.log(chrome.runtime.lastError.message);
-            if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
-              var notification = chrome.notifications.create('showNotification', optOpera, function() {});
-            }
-            return;
-          }
-          // auto clear after 5s
-          /*
-          setTimeout(function() {
-            chrome.notifications.clear('showNotification', function(){});
-          }, 5000);
-          */
-        });
+        renderNotification(count);
       }
     });
   }
-  
+
+  /**
+   * Helpers
+   */
+
+  // XHR helper function
+  var xhr = function () {
+    var xhr = new XMLHttpRequest();
+    return function(method, url, callback) {
+      xhr.onreadystatechange = function () {
+        // request finished and response is ready
+        if (xhr.readyState === 4) {
+          if (xhr.status !== 200) {
+            callback(false);
+          }
+          callback(xhr.responseText);
+        }
+      };
+      xhr.open(method, url);
+      xhr.send();
+    };
+  }();
+
+  function getHomeUrl(game) {
+    return BASE_URL + game + '/';
+  }
+  function getUpdateUrl(game) {
+    return BASE_URL + game + '/' + UPDATES_PATH;
+  }
+  function getFriendsUrlJson(game) {
+    return BASE_URL + game + '/' + COMCENTER_PATH;
+  }
+  function getNotificationsUrlJson(game) {
+    return BASE_URL + game + '/' + NOTIFICATIONS_PATH;
+  }
+
+  // badge renderer
+  function renderBadge(badge, color, title) {
+    chrome.browserAction.setBadgeText({
+      text: badge
+    });
+    chrome.browserAction.setBadgeBackgroundColor({
+      color: color
+    });
+    chrome.browserAction.setTitle({
+      title: title
+    });
+  }
+
+  // notitifcation renderer
+  function renderNotification(count) {
+    //console.log('renderNotification(' + count + ')'); // debug
+    var opt = {
+      type: "basic",
+      title: chrome.i18n.getMessage('notificationTitle'),
+      message: chrome.i18n.getMessage('notificationMessage', [count]),
+      iconUrl: "icon-48.png",
+      buttons: [
+        { title: chrome.i18n.getMessage('notificationButton2Title') },
+      ]
+    };
+    var optOpera = {
+      type: "basic",
+      title: chrome.i18n.getMessage('notificationTitle'),
+      message: chrome.i18n.getMessage('notificationMessage', [count]),
+      iconUrl: "icon-48.png"
+    };
+    var notification = chrome.notifications.create('showNotification', opt, function() {
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError.message);
+        if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
+          var notification = chrome.notifications.create('showNotification', optOpera, function() {});
+        }
+        return;
+      }
+    });
+  }
+
+  function isBattlelogUrl(url) {
+    return url.indexOf(getHomeUrl(localStorage.game)) == 0;
+  }
+
+  function isBattlelogUpdatesUrl(url) {
+    return url.indexOf(getUpdateUrl(localStorage.game)) == 0;
+  }
+
+  function openBattlelogHomeInTab() {
+    // check if Battle is already open
+    chrome.tabs.getAllInWindow(undefined, function(tabs) {
+      for (var i = 0, tab; tab = tabs[i]; i++) {
+        if (tab.url && isBattlelogUrl(tab.url)) {
+          chrome.tabs.update(tab.id, {selected: true});
+          return;
+        }
+      }
+      chrome.tabs.create({url: getHomeUrl(localStorage.game)});
+    });
+  }
+
+  function openBattlelogUpdatesInTab() {
+    // check if Battlelog is already open
+    chrome.tabs.getAllInWindow(undefined, function(tabs) {
+      for (var i = 0, tab; tab = tabs[i]; i++) {
+        if (tab.url && isBattlelogUpdatesUrl(tab.url)) {
+          chrome.tabs.update(tab.id, {selected: true});
+          return;
+        }
+      }
+      chrome.tabs.create({url: getUpdateUrl(localStorage.game)});
+    });
+  }
   function isBattlelogUrl(url) {
     return url.indexOf(getHomeUrl(localStorage.game)) == 0;
   }
@@ -236,6 +280,10 @@
     });
   }
 
+  /**
+   * Events
+   */
+
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
   if (localStorage.notifIsActivated == 'true'
@@ -245,7 +293,7 @@
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
     if (alarm.name == 'badge') {
-      chrome.runtime.sendMessage('updatebadge');
+      chrome.runtime.sendMessage({do: 'updatebadge'});
     }
     if (alarm.name == 'notification') {
       showNotification();
@@ -254,8 +302,8 @@
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-    chrome.runtime.sendMessage('updatebadge');
-    chrome.runtime.sendMessage('shownotification');
+    chrome.runtime.sendMessage({do: 'updatebadge'});
+    chrome.runtime.sendMessage({do: 'shownotification'});
     openBattlelogHomeInTab();
   });
 
@@ -278,12 +326,12 @@
     });
   }
 
-  // Check if new version is available
+  // check if new version is available
   chrome.runtime.onUpdateAvailable.addListener(function (details) {    
     console.log("updating to version " + details.version);
     chrome.runtime.reload();
   });
-  // Check whether new version is installed
+  // check whether new version is installed
   chrome.runtime.onInstalled.addListener(function (details) {
     if (details.reason == 'install') {
       console.log("first install");
@@ -296,18 +344,21 @@
       var version = chrome.runtime.getManifest().version;
       console.log("updated from " + details.previousVersion + " to " + version);
     }
-    chrome.runtime.sendMessage('updatebadge');
+    chrome.runtime.sendMessage({do: 'updatebadge'});
   });
 
   // on message update badge
-  chrome.runtime.onMessage.addListener(function (message) {
-    //console.log('message: ' + '"' + message + '"'); // debug
-    switch (message) {
+  chrome.runtime.onMessage.addListener(function (message, sender, response) {
+    //console.log('message: ' + '"' + message.do + '"'); // debug
+    switch (message.do) {
       case 'updatebadge':
         updateBadge();
         break;
       case 'shownotification':
         showNotification();
+        break;
+      case 'shownotification_test':
+        renderNotification(Math.floor((Math.random()*10)+1));
         break;
     }
   });

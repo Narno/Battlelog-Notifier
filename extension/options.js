@@ -31,6 +31,12 @@
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
+    if (!chrome.notifications) {
+      $(function() {
+        $('#li_notifications').css('display', 'none');
+      });
+    }
+
     // Laod options
     function loadOptions() {
       // game
@@ -70,10 +76,10 @@
 
     function saveOptions() {
       localStorage.setItem('game', inputGame.value);
-      //console.log('inputNotifIsActivated.checked:' + inputNotifIsActivated.checked); // debug
       localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
       localStorage.setItem('notifFrequency', inputNotifFrequency.value);
-      chrome.runtime.sendMessage('updatebadge');
+      chrome.runtime.sendMessage({do: 'updatebadge'});
+      // success message
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');
       successTimeout = setTimeout(function() {
@@ -84,31 +90,8 @@
     // Notification test
     document.getElementById('notifTest').addEventListener('click', function () {
       if (chrome.notifications) {
-        //console.log('chrome.notifications'); // debug
-        var opt = {
-          type: "basic",
-          title: chrome.i18n.getMessage('notificationTitle'),
-          message: chrome.i18n.getMessage('notificationMessage', [7]),
-          iconUrl: "icon-48.png",
-          buttons: [
-            { title: chrome.i18n.getMessage('notificationButton2Title') },
-          ]
-        };
-        var optOpera = {
-          type: "basic",
-          title: chrome.i18n.getMessage('notificationTitle'),
-          message: chrome.i18n.getMessage('notificationMessage', [7]),
-          iconUrl: "icon-48.png"
-        };
-        var notification = chrome.notifications.create('showNotification', opt, function() {
-          if (chrome.runtime.lastError) {
-            console.log(chrome.runtime.lastError.message);
-            if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
-              var notification = chrome.notifications.create('showNotification', optOpera, function() {});
-            }
-            return;
-          }
-        });
+        chrome.runtime.sendMessage({do: 'shownotification_test'});
+        return;
       }
     });
   });
