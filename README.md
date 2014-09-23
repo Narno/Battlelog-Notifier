@@ -9,6 +9,8 @@ Chromium extension (Google Chrome and Opera) that displays the count of your [Ba
 Installation
 ------------
 
+* Manually
+
 1. Download [the lastest release](https://github.com/Narno/Battlelog-Notifier/releases)
 2. Open the extensions page of your browser
 3. Drag & drop the _.crx_ file in that tab
