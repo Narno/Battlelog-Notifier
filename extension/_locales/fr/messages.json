@@ -1,21 +1,21 @@
 {
     "extName": {
-        "message": "Battlelog Notifier"
+        "message": "Notificateur Battlelog"
     },
     "extDescription": {
-        "message": "Displays the count of your Battlelog friends in the extension's badge, by status: in game, online or offline."
+        "message": "Affiche le nombre de vos amis Battlelog dans le badge de l'extension, par statut : En jeu, en ligne ou hors ligne."
     },
     "statusIngame": {
-        "message": "ingame"
+        "message": "en jeu"
     },
     "statusOnline": {
-        "message": "online"
+        "message": "en ligne"
     },
     "statusOffline": {
-        "message": "offline"
+        "message": "hors ligne"
     },
     "browserActionDefaultTitle": {
-        "message": "$count$ friend(s) $status$",
+        "message": "$count$ amis(s) $status$",
         "placeholders": {
             "count": {
                 "content": "$1",
@@ -23,18 +23,18 @@
             },
             "status": {
                 "content": "$2",
-                "example": "online"
+                "example": "en ligne"
             }
         }
     },
     "browserActionErrorTitle": {
-        "message": "You should be logged into your Battlelog account"
+        "message": "Vous devez être connecté à votre compte Battlelog"
     },
     "notificationTitle": {
-        "message": "Battlelog updates"
+        "message": "Mises à jour Battlelog"
     },
     "notificationMessage": {
-        "message": "You got $count$ new updates",
+        "message": "Vous avez $count$ nouvelles mises à jour",
         "placeholders": {
             "count": {
                 "content": "$1",
@@ -43,42 +43,42 @@
         }
     },
     "notificationButton1Title": {
-        "message": "Dismiss"
+        "message": "Rejeter"
     },
     "notificationButton2Title": {
-        "message": "View all updates"
+        "message": "Voir toutes les mises à jour"
     },
     "optionsHeaderGeneral": {
-        "message": "General"
+        "message": "Général"
     },
     "optionsSaved": {
-        "message": "Options saved"
+        "message": "Options enregistrées"
     },
     "optionsSectionToolbarIconHeader": {
-        "message": "Toolbar icon"
+        "message": "Icône de la barre"
     },
     "optionsSectionToolbarIcon": {
-        "message": "Define the default landing page when clicking on the toolbar icon."
+        "message": "Définir la page de destination par défaut au clic sur l'icône de la barre d'outils."
     },
     "optionsGame": {
-        "message": "Game"
+        "message": "Jeu"
     },
     "optionsHeaderNotifications": {
         "message": "Notifications"
     },
     "optionsSectionUpdatesHeader": {
-        "message": "Updates"
+        "message": "Mises à jour"
     },
     "optionsCheckboxNotifications": {
-        "message": "Displays notifications when you get new updates"
+        "message": "Affiche des notifications lorsque vous obtenez de nouvelles mises à jour"
     },
     "optionsSelectNotifications": {
-        "message": "Check new updates each"
+        "message": "Vérifiez les nouvelles mise à jour toutes les"
     },
     "optionsMinutes": {
         "message": "minute(s)"
     },
     "optionsTestNotifications": {
-        "message": "Test notifications"
+        "message": "Tester les notifications"
     }
 }

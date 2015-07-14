@@ -27,6 +27,7 @@
       var friendsIngameCount = 0;
       var count = '0';
       var status;
+      var statusLabel;
 
       if (data === false) {
         callback(false);
@@ -56,15 +57,18 @@
           if (friendsIngameCount > 0) {
             count = friendsIngameCount.toString();
             status = 'ingame';
+            statusLabel = chrome.i18n.getMessage('statusIngame');
           }
           else {
             if (friendsOnlineCount > 0) {
               count = friendsOnlineCount.toString();
               status = 'online';
+              statusLabel = chrome.i18n.getMessage('statusOnline');
             }
             else {
               count = friendsCount.toString();
               status = 'offline';
+              statusLabel = chrome.i18n.getMessage('statusOffline');
             }
           }
         }
@@ -72,8 +76,9 @@
         else {
           count = '0';
           status = 'offline';
+          statusLabel = chrome.i18n.getMessage('statusOffline');
         }
-        callback(count, status);
+        callback(count, status, statusLabel);
       }
       else {
         callback(false);
@@ -105,7 +110,7 @@
   function updateBadge() {
     //console.log('updateBadge()'); // debug
     var color;
-    FriendsCount(function (count, status) {
+    FriendsCount(function (count, status, statusLabel) {
       //console.log('friends count: ' + count); // debug
       if (count !== false) {
         color = colorOffline;
@@ -115,7 +120,7 @@
         if (status == 'online') {
           color = colorOnline;
         }
-        renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, status]));
+        renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, statusLabel]));
       } else {
         renderBadge('?', [190, 190, 190, 230], chrome.i18n.getMessage('browserActionErrorTitle'));
       }
