@@ -31,10 +31,6 @@
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
-    if (!chrome.notifications) {
-      $(function() {
-        $('#li_notifications').css('display', 'none');
-      });
     }
 
     // Laod options
@@ -42,38 +38,25 @@
       // game
       if (localStorage.getItem('game') === null) {
         inputGame.value = 'bf4';
-      }
-      else {
+      } else {
         inputGame.value = localStorage.getItem('game');
       }
       // notifIsActivated
       if (localStorage.getItem('notifIsActivated') === null) {
         inputNotifIsActivated.checked = false;
-      }
-      else {
+      } else {
         inputNotifIsActivated.checked = (localStorage.getItem('notifIsActivated') === 'true');
       }
       // notifFrequency
       if (localStorage.getItem('notifFrequency') === null) {
         inputNotifFrequency.value = '1';
-      }
-      else {
+      } else {
         inputNotifFrequency.value = localStorage.getItem('notifFrequency');
       }
     }
     loadOptions();
 
-    // Save
-    document.getElementById('game').addEventListener('change', function () {
-      saveOptions();
-    });
-    document.getElementById('notifIsActivated').addEventListener('change', function () {
-      saveOptions();
-    });
-    document.getElementById('notifFrequency').addEventListener('change', function () {
-      saveOptions();
-    });
-
+    // Save options
     function saveOptions() {
       localStorage.setItem('game', inputGame.value);
       localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
@@ -86,6 +69,15 @@
         successMessage.classList.remove('visible');
       }, 2000);
     }
+    document.getElementById('game').addEventListener('change', function () {
+      saveOptions();
+    });
+    document.getElementById('notifIsActivated').addEventListener('change', function () {
+      saveOptions();
+    });
+    document.getElementById('notifFrequency').addEventListener('change', function () {
+      saveOptions();
+    });
 
     // Notification test
     document.getElementById('notifTest').addEventListener('click', function () {
@@ -94,5 +86,12 @@
         return;
       }
     });
+
+    // Hide notifications options if not available
+    if (!chrome.notifications) {
+      $(function() {
+        $('#li_notifications').css('display', 'none');
+      });
+    }
   });
 })();
