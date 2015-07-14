@@ -43,6 +43,7 @@
 
       if (json.type == 'success') {
         if (json.data.originavailable) {
+          // count friends
           for(key in json.data.friendscomcenter) {
             if(json.data.friendscomcenter.hasOwnProperty(key)) {
               friendsCount++;
@@ -58,29 +59,25 @@
             count = friendsIngameCount.toString();
             status = 'ingame';
             statusLabel = chrome.i18n.getMessage('statusIngame');
-          }
-          else {
+          } else {
             if (friendsOnlineCount > 0) {
               count = friendsOnlineCount.toString();
               status = 'online';
               statusLabel = chrome.i18n.getMessage('statusOnline');
-            }
-            else {
+            } else {
               count = friendsCount.toString();
               status = 'offline';
               statusLabel = chrome.i18n.getMessage('statusOffline');
             }
           }
-        }
         // origin not available
-        else {
+        } else {
           count = '0';
           status = 'offline';
           statusLabel = chrome.i18n.getMessage('statusOffline');
         }
         callback(count, status, statusLabel);
-      }
-      else {
+      } else {
         callback(false);
       }
     });
@@ -99,8 +96,7 @@
       if (json.type == 'success') {
         count = json.data.numUnread.toString();
         callback(count);
-      }
-      else {
+      } else {
         callback(false);
       }
     });
@@ -128,9 +124,7 @@
   }
 
   function showNotification() {
-    if (!chrome.notifications
-      || localStorage.notifIsActivated != 'true')
-    {
+    if (!chrome.notifications || localStorage.notifIsActivated != 'true') {
       return;
     }
     NotificationsCount(function (count) {
@@ -291,9 +285,7 @@
 
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
-  if (localStorage.notifIsActivated == 'true'
-    && localStorage.notifFrequency)
-  {
+  if (localStorage.notifIsActivated == 'true' && localStorage.notifFrequency) {
     chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifFrequency)});
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
@@ -332,7 +324,7 @@
   }
 
   // check if new version is available
-  chrome.runtime.onUpdateAvailable.addListener(function (details) {    
+  chrome.runtime.onUpdateAvailable.addListener(function (details) {
     console.log("updating to version " + details.version);
     chrome.runtime.reload();
   });
@@ -344,8 +336,7 @@
       localStorage.game = 'bf4';
       localStorage.notifIsActivated = false;
       localStorage.notifFrequency = 1;
-    }
-    else if (details.reason == 'update') {
+    } else if (details.reason == 'update') {
       var version = chrome.runtime.getManifest().version;
       console.log("updated from " + details.previousVersion + " to " + version);
     }
