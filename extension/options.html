@@ -43,16 +43,26 @@
             <h1 data-message="optionsHeaderGeneral">General</h1>
           </header>
           <div class="content">
-            <section>
-              <h3 data-message="optionsSectionToolbarIconHeader">Toolbar icon</h3>
-              <p data-message="optionsSectionToolbarIcon">Define the default landing page when clicking on the toolbar icon.</p>
-              <label for="game" data-message="optionsGame">Game</label>
+            <div class="controls">
+              <label for="game" data-message="optionsGame">Default game</label>
               <select id="game" autofocus>
                 <option value="bf4">BF4</option>
                 <option value="bf3">BF3</option>
                 <option value="bfh">Hardline</option>
                 <option value="mohw">Medal of Honor</option>
               </select>
+            </div>
+            <section>
+              <h3 data-message="optionsSectionToolbarIconHeader">Toolbar icon</h3>
+              <!--<p data-message="optionsSectionToolbarIcon">Define the default landing page when clicking on the toolbar icon.</p>-->
+              <div class="checkbox">
+                <input type="checkbox" id="popupIsActivated">
+                <label for="popupIsActivated" data-message="optionsCheckboxPopup">Activates the popup instead of opening the Battlelog.</label>
+              </div>
+              <div class="checkbox">
+                <input type="checkbox" id="offlinePouet">
+                <label for="offlinePouet" data-message="optionsofflinePouet">offlinePouet.</label>
+              </div>
             </section>
           </div><!-- /content -->
         </div><!-- /general -->

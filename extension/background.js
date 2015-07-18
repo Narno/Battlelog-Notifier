@@ -116,6 +116,11 @@
         if (status == 'online') {
           color = colorOnline;
         }
+        if (status == 'offline') {
+          if (localStorage.offlinePouet != 'true') {
+            count = '0';
+          }
+        }
         renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, statusLabel]));
       } else {
         renderBadge('?', [190, 190, 190, 230], chrome.i18n.getMessage('browserActionErrorTitle'));

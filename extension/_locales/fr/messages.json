@@ -15,7 +15,7 @@
         "message": "hors ligne"
     },
     "browserActionDefaultTitle": {
-        "message": "$count$ amis(s) $status$",
+        "message": "$count$ ami(s) $status$",
         "placeholders": {
             "count": {
                 "content": "$1",
@@ -61,7 +61,7 @@
         "message": "Définir la page de destination par défaut au clic sur l'icône de la barre d'outils."
     },
     "optionsGame": {
-        "message": "Jeu"
+        "message": "Jeu par défaut"
     },
     "optionsHeaderNotifications": {
         "message": "Notifications"
@@ -80,5 +80,8 @@
     },
     "optionsTestNotifications": {
         "message": "Tester les notifications"
+    },
+    "optionsofflinePouet": {
+        "message": "optionsofflinePouet."
     }
 }

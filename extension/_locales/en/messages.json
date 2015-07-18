@@ -61,7 +61,7 @@
         "message": "Define the default landing page when clicking on the toolbar icon."
     },
     "optionsGame": {
-        "message": "Game"
+        "message": "Default game"
     },
     "optionsHeaderNotifications": {
         "message": "Notifications"
@@ -80,5 +80,11 @@
     },
     "optionsTestNotifications": {
         "message": "Test notifications"
+    },
+    "optionsCheckboxPopup": {
+        "message": "Activates popup when when you click on the toolbar icon."
+    },
+    "optionsofflinePouet": {
+        "message": "optionsofflinePouet."
     }
 }
