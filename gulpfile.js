@@ -1,7 +1,5 @@
 'use strict';
 
-// npm install gulp gulp-minify-css gulp-uglify gulp-clean gulp-cleanhtml gulp-jshint gulp-strip-debug gulp-zip --save-dev
-
 var extension_name = 'Battlelog-Notifier';
 
 var gulp = require('gulp'),
@@ -45,7 +43,8 @@ gulp.task('jshint', function() {
         .pipe(jshint.reporter('default'));
 });
 
-// copy lib scripts and uglify all other scripts
+// copy lib (vendor) scripts
+// and uglify all other scripts
 gulp.task('scripts', ['jshint'], function() {
     gulp.src('extension/lib/**/*.js')
         .pipe(gulp.dest('build/lib'));
@@ -55,7 +54,7 @@ gulp.task('scripts', ['jshint'], function() {
         .pipe(gulp.dest('build'));
 });
 
-// copy and minify styles
+// copy and minify CSS
 gulp.task('styles', function() {
     gulp.src('extension/**/*.min.css')
         .pipe(gulp.dest('build'));
@@ -68,13 +67,12 @@ gulp.task('styles', function() {
 gulp.task('zip', ['html', 'scripts', 'styles', 'copy'], function() {
     var manifest = require('./extension/manifest.json'),
         distFileName = extension_name + '_v' + manifest.version + '.zip';
-    // build distributable extension
     return gulp.src(['build/**'])
         .pipe(zip(distFileName))
         .pipe(gulp.dest('dist'));
 });
 
-// build CRX file
+// build distributable (CRX) extension
 gulp.task('crx', ['zip'], function() {
     var manifest = require('./build/manifest.json'),
         crxFileName = extension_name + '_v' + manifest.version + '.crx';
