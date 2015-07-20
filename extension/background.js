@@ -45,50 +45,49 @@
 
       try {
         var json = JSON.parse(data);
+        if (json.type == 'success') {
+          if (json.data.originavailable) {
+            // count friends
+            for(key in json.data.friendscomcenter) {
+              if(json.data.friendscomcenter.hasOwnProperty(key)) {
+                friendsCount++;
+                if (json.data.friendscomcenter[key].presence.isOnline) {
+                  friendsOnlineCount++;
+                }
+                if (json.data.friendscomcenter[key].presence.isPlaying) {
+                  friendsIngameCount++;
+                }
+              }
+            }
+            if (friendsIngameCount > 0) {
+              count = friendsIngameCount.toString();
+              status = 'ingame';
+              statusLabel = chrome.i18n.getMessage('statusIngame');
+            } else {
+              if (friendsOnlineCount > 0) {
+                count = friendsOnlineCount.toString();
+                status = 'online';
+                statusLabel = chrome.i18n.getMessage('statusOnline');
+              } else {
+                count = friendsCount.toString();
+                status = 'offline';
+                statusLabel = chrome.i18n.getMessage('statusOffline');
+              }
+            }
+          // origin not available
+          } else {
+            count = '0';
+            status = 'offline';
+            statusLabel = chrome.i18n.getMessage('statusOffline');
+          }
+          callback(count, status, statusLabel);
+        } else {
+          callback(false);
+        }
       } catch (e) {
         console.error("Parsing error:", e);
         callback(false);
         return;
-      }
-
-      if (json.type == 'success') {
-        if (json.data.originavailable) {
-          // count friends
-          for(key in json.data.friendscomcenter) {
-            if(json.data.friendscomcenter.hasOwnProperty(key)) {
-              friendsCount++;
-              if (json.data.friendscomcenter[key].presence.isOnline) {
-                friendsOnlineCount++;
-              }
-              if (json.data.friendscomcenter[key].presence.isPlaying) {
-                friendsIngameCount++;
-              }
-            }
-          }
-          if (friendsIngameCount > 0) {
-            count = friendsIngameCount.toString();
-            status = 'ingame';
-            statusLabel = chrome.i18n.getMessage('statusIngame');
-          } else {
-            if (friendsOnlineCount > 0) {
-              count = friendsOnlineCount.toString();
-              status = 'online';
-              statusLabel = chrome.i18n.getMessage('statusOnline');
-            } else {
-              count = friendsCount.toString();
-              status = 'offline';
-              statusLabel = chrome.i18n.getMessage('statusOffline');
-            }
-          }
-        // origin not available
-        } else {
-          count = '0';
-          status = 'offline';
-          statusLabel = chrome.i18n.getMessage('statusOffline');
-        }
-        callback(count, status, statusLabel);
-      } else {
-        callback(false);
       }
     });
   };
@@ -110,13 +109,13 @@
         callback(false);
       }
     });
-  }
+  };
 
   // update badge
   function updateBadge() {
     //console.log('updateBadge()'); // debug
     var color;
-    FriendsCount(function (count, status, statusLabel) {
+    new FriendsCount(function (count, status, statusLabel) {
       //console.log('friends count: ' + count); // debug
       if (count !== false) {
         color = colorOffline;
@@ -148,7 +147,7 @@
     if (!chrome.notifications || localStorage.notifIsActivated != 'true') {
       return;
     }
-    NotificationsCount(function (count) {
+    new NotificationsCount(function (count) {
       //console.log('notifications count: ' + count); // debug
       if (count !== false && count > 0) {
         renderNotification(count);
@@ -234,44 +233,11 @@
   }
 
   function isBattlelogUrl(url) {
-    return url.indexOf(getHomeUrl(localStorage.game)) == 0;
+    return url.indexOf(getHomeUrl(localStorage.game)) === 0;
   }
 
   function isBattlelogUpdatesUrl(url) {
-    return url.indexOf(getUpdateUrl(localStorage.game)) == 0;
-  }
-
-  function openBattlelogHomeInTab() {
-    // check if Battle is already open
-    chrome.tabs.getAllInWindow(undefined, function(tabs) {
-      for (var i = 0, tab; tab = tabs[i]; i++) {
-        if (tab.url && isBattlelogUrl(tab.url)) {
-          chrome.tabs.update(tab.id, {selected: true});
-          return;
-        }
-      }
-      chrome.tabs.create({url: getHomeUrl(localStorage.game)});
-    });
-  }
-
-  function openBattlelogUpdatesInTab() {
-    // check if Battlelog is already open
-    chrome.tabs.getAllInWindow(undefined, function(tabs) {
-      for (var i = 0, tab; tab = tabs[i]; i++) {
-        if (tab.url && isBattlelogUpdatesUrl(tab.url)) {
-          chrome.tabs.update(tab.id, {selected: true});
-          return;
-        }
-      }
-      chrome.tabs.create({url: getUpdateUrl(localStorage.game)});
-    });
-  }
-  function isBattlelogUrl(url) {
-    return url.indexOf(getHomeUrl(localStorage.game)) == 0;
-  }
-
-  function isBattlelogUpdatesUrl(url) {
-    return url.indexOf(getUpdateUrl(localStorage.game)) == 0;
+    return url.indexOf(getUpdateUrl(localStorage.game)) === 0;
   }
 
   function openBattlelogHomeInTab() {
