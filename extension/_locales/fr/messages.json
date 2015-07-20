@@ -48,20 +48,26 @@
     "notificationButton2Title": {
         "message": "Voir toutes les mises à jour"
     },
+    "optionsSaved": {
+        "message": "Options enregistrées"
+    },
     "optionsHeaderGeneral": {
         "message": "Général"
     },
-    "optionsSaved": {
-        "message": "Options enregistrées"
+    "optionsGame": {
+        "message": "Jeu par défaut"
     },
     "optionsSectionToolbarIconHeader": {
         "message": "Icône de la barre"
     },
-    "optionsSectionToolbarIcon": {
-        "message": "Définir la page de destination par défaut au clic sur l'icône de la barre d'outils."
+    "optionsIconShowOffline": {
+        "message": "Afficher le nombre des amis hors ligne"
     },
-    "optionsGame": {
-        "message": "Jeu par défaut"
+    "optionsIconShowOnline": {
+        "message": "Afficher le nombre des amis en ligne"
+    },
+    "optionsIconShowIngame": {
+        "message": "Afficher le nombre des amis en jeu"
     },
     "optionsHeaderNotifications": {
         "message": "Notifications"
@@ -81,7 +87,13 @@
     "optionsTestNotifications": {
         "message": "Tester les notifications"
     },
-    "optionsIconShowOffline": {
-        "message": "Afficher le compte des amis hors ligne."
+    "optionsHeaderAbout": {
+        "message": "A propos"
+    },
+    "optionsChangelog": {
+        "message": "Journal des changements"
+    },
+    "optionsSourcecode": {
+        "message": "Code source"
     }
 }

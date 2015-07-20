@@ -30,10 +30,11 @@
   <body class="chrome-bootstrap">
     <div class="frame">
       <div class="navigation">
-        <h1><a href="#" data-message="extName">Battlelog Notifier</a></h1>
+        <h1 data-message="extName">Battlelog Notifier</h1>
         <ul class="menu">
           <li class="selected"><a href="#general" data-message="optionsHeaderGeneral">General</a></li>
           <li id="li_notifications"><a href="#notifications" data-message="optionsHeaderNotifications">Notifications</a></li>
+          <li><a href="#about" data-message="optionsHeaderAbout">About</a></li>
         </ul>
         <div id="success_message" class="alert" data-message="optionsSaved">Options saved</div>
       </div>
@@ -54,15 +55,21 @@
             </div>
             <section>
               <h3 data-message="optionsSectionToolbarIconHeader">Toolbar icon</h3>
-              <!--<p data-message="optionsSectionToolbarIcon">Define the default landing page when clicking on the toolbar icon.</p>-->
               <div class="checkbox">
                 <input type="checkbox" id="iconShowOffline">
-                <label for="iconShowOffline" data-message="optionsIconShowOffline">iconShowOffline.</label>
+                <label for="iconShowOffline" data-message="optionsIconShowOffline">Display the count of offline friends</label>
+              </div>
+              <div class="checkbox">
+                <input type="checkbox" id="iconShowOnline">
+                <label for="iconShowOnline" data-message="optionsIconShowOnline">Display the count of online friends</label>
+              </div>
+              <div class="checkbox">
+                <input type="checkbox" id="iconShowIngame">
+                <label for="iconShowIngame" data-message="optionsIconShowIngame">Display the count of ingame friends</label>
               </div>
             </section>
           </div><!-- /content -->
         </div><!-- /general -->
-
         <div id="notifications">
           <header>
             <h1 data-message="optionsHeaderNotifications">Notifications</h1>
@@ -90,16 +97,24 @@
                 </select>
                 <span data-message="optionsMinutes">minute(s)</span>.
               </div>
-            </section>
-            <section>
-              <h3>Test</h3>
               <div style="margin-top: 10px;">
                 <button id="notifTest" data-message="optionsTestNotifications">Test notifications</button>
               </div>
             </section>
           </div>
         </div><!-- /notifications -->
-
+        <div id="about">
+          <header>
+            <h1 data-message="optionsHeaderAbout">About</h1>
+          </header>
+          <div class="content">
+            <span data-message="extName">Battlelog Notifier</span>&nbsp;v<span id="version"></span>
+            <ul class="highlightable editable">
+              <li><a href="https://github.com/Narno/Battlelog-Notifier/releases" target="_blank" data-message="optionsChangelog">Changelog</a></li>
+              <li><a href="https://github.com/Narno/Battlelog-Notifier" target="_blank" data-message="optionsSourcecode">Source code</a></li>
+            </ul>
+          </div>
+        </div><!-- /about -->
       </div>
     </div>
   </body>

@@ -122,12 +122,18 @@
         color = colorOffline;
         if (status == 'ingame') {
           color = colorIngame;
+          if (localStorage.iconShowIngame == 'false') {
+            count = '0';
+          }
         }
         if (status == 'online') {
           color = colorOnline;
+          if (localStorage.iconShowOnline == 'false') {
+            count = '0';
+          }
         }
         if (status == 'offline') {
-          if (localStorage.iconShowOffline != 'true') {
+          if (localStorage.iconShowOffline == 'false') {
             count = '0';
           }
         }
@@ -349,6 +355,9 @@
       console.log("first install");
       // Initialize options
       localStorage.game = 'bf4';
+      localStorage.iconShowOffline = false;
+      localStorage.iconShowOnline = false;
+      localStorage.iconShowIngame = true;
       localStorage.notifIsActivated = false;
       localStorage.notifFrequency = 1;
     } else if (details.reason == 'update') {
