@@ -81,10 +81,7 @@
     "optionsTestNotifications": {
         "message": "Test notifications"
     },
-    "optionsCheckboxPopup": {
-        "message": "Activates popup when when you click on the toolbar icon."
-    },
-    "optionsofflinePouet": {
-        "message": "optionsofflinePouet."
+    "optionsIconShowOffline": {
+        "message": "Display the count of offline friends."
     }
 }

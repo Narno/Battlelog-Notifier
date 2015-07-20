@@ -117,7 +117,7 @@
           color = colorOnline;
         }
         if (status == 'offline') {
-          if (localStorage.offlinePouet != 'true') {
+          if (localStorage.iconShowOffline != 'true') {
             count = '0';
           }
         }

@@ -81,7 +81,7 @@
     "optionsTestNotifications": {
         "message": "Tester les notifications"
     },
-    "optionsofflinePouet": {
-        "message": "optionsofflinePouet."
+    "optionsIconShowOffline": {
+        "message": "Afficher le compte des amis hors ligne."
     }
 }

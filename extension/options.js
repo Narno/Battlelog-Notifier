@@ -30,8 +30,7 @@
     var inputNotifFrequency = document.getElementById('notifFrequency');
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
-    var inputPopupIsActivated = document.getElementById('popupIsActivated');
-    var inputOfflinePouet = document.getElementById('offlinePouet');
+    var inputIconShowOffline = document.getElementById('iconShowOffline');
 
     // Apply translations
     function applyTranslations() {
@@ -64,12 +63,6 @@
       } else {
         inputNotifFrequency.value = localStorage.getItem('notifFrequency');
       }
-      // popupIsActivated
-      if (localStorage.getItem('popupIsActivated') === null) {
-        popupIsActivated.checked = false;
-      } else {
-        popupIsActivated.checked = (localStorage.getItem('popupIsActivated') === 'true');
-      }
     }
     loadOptions();
 
@@ -78,15 +71,8 @@
       localStorage.setItem('game', inputGame.value);
       localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
       localStorage.setItem('notifFrequency', inputNotifFrequency.value);
-      localStorage.setItem('popupIsActivated', inputPopupIsActivated.checked);
-      localStorage.setItem('offlinePouet', inputOfflinePouet.checked);
+      localStorage.setItem('iconShowOffline', inputIconShowOffline.checked);
       chrome.runtime.sendMessage({do: 'updatebadge'});
-      // popup or not?
-      if (localStorage.popupIsActivated === 'true') {
-        chrome.browserAction.setPopup({popup: "popup.html"});
-      } else {
-        chrome.browserAction.setPopup({popup: ""});
-      }
       // success message
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');
@@ -103,10 +89,7 @@
     document.getElementById('notifFrequency').addEventListener('change', function () {
       saveOptions();
     });
-    document.getElementById('popupIsActivated').addEventListener('change', function () {
-      saveOptions();
-    });
-    document.getElementById('offlinePouet').addEventListener('change', function () {
+    document.getElementById('iconShowOffline').addEventListener('change', function () {
       saveOptions();
     });
 
