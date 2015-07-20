@@ -14,6 +14,16 @@
   var colorOnline  = [120, 199, 83, 255];
   var colorIngame  = [96, 192, 246, 255];
 
+  var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/feature-options-bis/test/fixtures/';
+  var COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
+  var COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
+  var NOTIFICATIONS_PATH_TEST_3 = 'updates/loadNotifications/3.json';
+
+  // Test
+  //var BASE_URL = BASE_URL_TEST;
+  //var COMCENTER_PATH = COMCENTER_PATH_TEST_INGAME;
+  //var NOTIFICATIONS_PATH = NOTIFICATIONS_PATH_TEST_3;
+
   /**
    * Main functions
    */
