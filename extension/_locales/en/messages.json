@@ -48,20 +48,26 @@
     "notificationButton2Title": {
         "message": "View all updates"
     },
+    "optionsSaved": {
+        "message": "Options saved"
+    },
     "optionsHeaderGeneral": {
         "message": "General"
     },
-    "optionsSaved": {
-        "message": "Options saved"
+    "optionsGame": {
+        "message": "Default game"
     },
     "optionsSectionToolbarIconHeader": {
         "message": "Toolbar icon"
     },
-    "optionsSectionToolbarIcon": {
-        "message": "Define the default landing page when clicking on the toolbar icon."
+    "optionsIconShowOffline": {
+        "message": "Display the count of offline friends"
     },
-    "optionsGame": {
-        "message": "Game"
+    "optionsIconShowOnline": {
+        "message": "Display the count of online friends"
+    },
+    "optionsIconShowIngame": {
+        "message": "Display the count of ingame friends"
     },
     "optionsHeaderNotifications": {
         "message": "Notifications"
@@ -80,5 +86,14 @@
     },
     "optionsTestNotifications": {
         "message": "Test notifications"
+    },
+    "optionsHeaderAbout": {
+        "message": "About"
+    },
+    "optionsChangelog": {
+        "message": "Changelog"
+    },
+    "optionsSourcecode": {
+        "message": "Source code"
     }
 }

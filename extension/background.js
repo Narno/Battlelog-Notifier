@@ -14,6 +14,16 @@
   var colorOnline  = [120, 199, 83, 255];
   var colorIngame  = [96, 192, 246, 255];
 
+  var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/feature-options-bis/test/fixtures/';
+  var COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
+  var COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
+  var NOTIFICATIONS_PATH_TEST_3 = 'updates/loadNotifications/3.json';
+
+  // Test
+  //var BASE_URL = BASE_URL_TEST;
+  //var COMCENTER_PATH = COMCENTER_PATH_TEST_INGAME;
+  //var NOTIFICATIONS_PATH = NOTIFICATIONS_PATH_TEST_3;
+
   /**
    * Main functions
    */
@@ -112,9 +122,20 @@
         color = colorOffline;
         if (status == 'ingame') {
           color = colorIngame;
+          if (localStorage.iconShowIngame == 'false') {
+            count = '0';
+          }
         }
         if (status == 'online') {
           color = colorOnline;
+          if (localStorage.iconShowOnline == 'false') {
+            count = '0';
+          }
+        }
+        if (status == 'offline') {
+          if (localStorage.iconShowOffline == 'false') {
+            count = '0';
+          }
         }
         renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, statusLabel]));
       } else {
@@ -334,6 +355,9 @@
       console.log("first install");
       // Initialize options
       localStorage.game = 'bf4';
+      localStorage.iconShowOffline = false;
+      localStorage.iconShowOnline = false;
+      localStorage.iconShowIngame = true;
       localStorage.notifIsActivated = false;
       localStorage.notifFrequency = 1;
     } else if (details.reason == 'update') {
