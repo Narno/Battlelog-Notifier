@@ -1,6 +1,6 @@
 {
   "name": "Battlelog-Notifier",
-  "version": "0.0.99",
+  "version": "0.1.0",
   "description": "Displays the count of your Battlelog friends in the extension's badge, by status: in game, online or offline.",
   "homepage": "http://narno.org/Battlelog-Notifier",
   "author": "Arnaud Ligny",
@@ -18,9 +18,10 @@
   },
   "devDependencies": {
     "gulp": ">=3.5.5",
+    "del": ">=1.2.0",
+    "vinyl-paths": ">=1.0.0",
     "gulp-zip": ">0.1.2",
     "gulp-uglify": ">=0.2.1",
-    "gulp-clean": ">=0.2.4",
     "gulp-minify-css": ">=0.3.0",
     "gulp-jshint": ">=1.5.0",
     "gulp-cleanhtml": ">=0.0.2",

@@ -3,20 +3,21 @@
 var extension_name = 'Battlelog-Notifier';
 
 var gulp = require('gulp'),
-    clean = require('gulp-clean'),
+    fs = require('fs'),
+    del = require('del'),
+    vinylpaths = require('vinyl-paths'),
     cleanhtml = require('gulp-cleanhtml'),
     minifycss = require('gulp-minify-css'),
     jshint = require('gulp-jshint'),
     stripdebug = require('gulp-strip-debug'),
     uglify = require('gulp-uglify'),
     zip = require('gulp-zip'),
-    fs = require('fs'),
     crx = require('gulp-crx');
 
 // clean build directory
 gulp.task('clean', function() {
-    return gulp.src('build/*', {read: false})
-        .pipe(clean());
+    return gulp.src('build/*')
+        .pipe(vinylpaths(del));
 });
 
 // copy static files
