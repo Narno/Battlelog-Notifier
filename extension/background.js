@@ -113,28 +113,37 @@
 
   // update badge
   function updateBadge() {
-    var color;
+    var color, badgeText = true;
     new FriendsCount(function (count, status, statusLabel) {
       if (count !== false) {
-        color = colorOffline;
-        if (status == 'ingame') {
-          color = colorIngame;
-          if (localStorage.iconShowIngame == 'false') {
-            count = '0';
-          }
+        switch(status) {
+          case 'ingame':
+            color = colorIngame;
+            if (localStorage.iconShowIngame == 'false') {
+              count = '0';
+              badgeText = false;
+            }
+            break;
+          case 'online':
+            color = colorOnline;
+            if (localStorage.iconShowOnline == 'false') {
+              count = '0';
+              badgeText = false;
+            }
+            break;
+          case 'offline':
+            if (localStorage.iconShowOffline == 'false') {
+              count = '0';
+              badgeText = false;
+            }
+          default:
+              color = colorOffline;
         }
-        if (status == 'online') {
-          color = colorOnline;
-          if (localStorage.iconShowOnline == 'false') {
-            count = '0';
-          }
+        if (badgeText) {
+          renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, statusLabel]));
+        } else {
+          renderBadge('', color, '');
         }
-        if (status == 'offline') {
-          if (localStorage.iconShowOffline == 'false') {
-            count = '0';
-          }
-        }
-        renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, statusLabel]));
       } else {
         renderBadge('?', [190, 190, 190, 230], chrome.i18n.getMessage('browserActionErrorTitle'));
       }
