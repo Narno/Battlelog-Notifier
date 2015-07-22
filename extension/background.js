@@ -14,7 +14,7 @@
   var colorOnline  = [120, 199, 83, 255];
   var colorIngame  = [96, 192, 246, 255];
 
-  var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/feature-options-bis/test/fixtures/';
+  var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/master/test/fixtures/';
   var COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
   var COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
   var NOTIFICATIONS_PATH_TEST_3 = 'updates/loadNotifications/3.json';
@@ -74,7 +74,7 @@
                 statusLabel = chrome.i18n.getMessage('statusOffline');
               }
             }
-          // origin not available
+          // EA Origin not available
           } else {
             count = '0';
             status = 'offline';
@@ -113,10 +113,8 @@
 
   // update badge
   function updateBadge() {
-    //console.log('updateBadge()'); // debug
     var color;
     new FriendsCount(function (count, status, statusLabel) {
-      //console.log('friends count: ' + count); // debug
       if (count !== false) {
         color = colorOffline;
         if (status == 'ingame') {
@@ -148,7 +146,6 @@
       return;
     }
     new NotificationsCount(function (count) {
-      //console.log('notifications count: ' + count); // debug
       if (count !== false && count > 0) {
         renderNotification(count);
       }
@@ -205,7 +202,6 @@
 
   // notitifcation renderer
   function renderNotification(count) {
-    //console.log('renderNotification(' + count + ')'); // debug
     var opt = {
       type: "basic",
       title: chrome.i18n.getMessage('notificationTitle'),
@@ -291,7 +287,7 @@
     openBattlelogHomeInTab();
   });
 
-  if (chrome.notifications) { // Opera
+  if (chrome.notifications) {
     // notification action
     chrome.notifications.onClicked.addListener(function () {
       openBattlelogHomeInTab();
@@ -299,7 +295,6 @@
     });
     // notification button(s) action
     chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
-      //console.log('button index: ' + buttonIndex); // debug
       switch (buttonIndex) {
         case 0:
           openBattlelogUpdatesInTab();
@@ -335,7 +330,6 @@
 
   // on message update badge
   chrome.runtime.onMessage.addListener(function (message, sender, response) {
-    //console.log('message: ' + '"' + message.do + '"'); // debug
     switch (message.do) {
       case 'updatebadge':
         updateBadge();
