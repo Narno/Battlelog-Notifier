@@ -21,34 +21,34 @@ gulp.task('clean', function() {
 
 // copy static files
 gulp.task('copy', function() {
-    gulp.src('extension/*.png')
+    gulp.src('src/*.png')
         .pipe(gulp.dest('build'));
-    gulp.src('extension/_locales/**')
+    gulp.src('src/_locales/**')
         .pipe(gulp.dest('build/_locales'));
-    return gulp.src('extension/manifest.json')
+    return gulp.src('src/manifest.json')
         .pipe(gulp.dest('build'));
 });
 
 // copy and compress HTML files
 gulp.task('html', function() {
-    return gulp.src('extension/*.html')
+    return gulp.src('src/*.html')
         .pipe(cleanhtml())
         .pipe(gulp.dest('build'));
 });
 
 // run scripts through JSHint
 gulp.task('jshint', function() {
-    return gulp.src('extension/*.js')
+    return gulp.src('src/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
-// copy lib (vendor) scripts
+// copy vendor scripts
 // and uglify all other scripts
 gulp.task('scripts', ['jshint'], function() {
-    gulp.src('extension/lib/**/*.js')
-        .pipe(gulp.dest('build/lib'));
-    return gulp.src(['extension/*.js', '!extension/lib/**/*.js'])
+    gulp.src('src/vendor/**/*.js')
+        .pipe(gulp.dest('build/vendor'));
+    return gulp.src(['src/*.js', '!src/vendor/**/*.js'])
         .pipe(stripdebug())
         .pipe(uglify())
         .pipe(gulp.dest('build'));
@@ -56,16 +56,16 @@ gulp.task('scripts', ['jshint'], function() {
 
 // copy and minify CSS
 gulp.task('styles', function() {
-    gulp.src('extension/**/*.min.css')
+    gulp.src('src/**/*.min.css')
         .pipe(gulp.dest('build'));
-    return gulp.src(['extension/*.css', '!extension/lib/**/*.css'])
-        .pipe(minifycss({root: 'extension', keepSpecialComments: 0}))
+    return gulp.src(['src/*.css', '!src/vendor/**/*.css'])
+        .pipe(minifycss({root: 'src', keepSpecialComments: 0}))
         .pipe(gulp.dest('build'));
 });
 
 // build ditributable after other tasks completed
 gulp.task('zip', ['html', 'scripts', 'styles', 'copy'], function() {
-    var manifest = require('./extension/manifest.json'),
+    var manifest = require('./src/manifest.json'),
         distFileName = extension_name + '_v' + manifest.version + '.zip';
     return gulp.src(['build/**'])
         .pipe(zip(distFileName))
