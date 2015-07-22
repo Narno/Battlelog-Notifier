@@ -95,5 +95,8 @@
     },
     "optionsSourcecode": {
         "message": "Code source"
+    },
+    "optionsContributors": {
+        "message": "Contributeurs"
     }
 }
