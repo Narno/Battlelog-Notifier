@@ -335,13 +335,15 @@
 
   // check if new version is available
   chrome.runtime.onUpdateAvailable.addListener(function (details) {
-    console.log("updating to version " + details.version);
+    var manifest = chrome.runtime.getManifest();
+    console.log(manifest.name + " updating to v" + details.version);
     chrome.runtime.reload();
   });
   // check whether new version is installed
   chrome.runtime.onInstalled.addListener(function (details) {
+    var manifest = chrome.runtime.getManifest();
     if (details.reason == 'install') {
-      console.log("first install");
+      console.log(manifest.name + " first install (v" + manifest.version + ")");
       // Initialize options
       localStorage.game = 'bf4';
       localStorage.iconShowOffline = false;
@@ -350,8 +352,7 @@
       localStorage.notifIsActivated = false;
       localStorage.notifFrequency = 5;
     } else if (details.reason == 'update') {
-      var version = chrome.runtime.getManifest().version;
-      console.log("updated from " + details.previousVersion + " to " + version);
+      console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
     }
     chrome.runtime.sendMessage({do: 'updatebadge'});
   });
