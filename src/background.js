@@ -345,10 +345,10 @@
       // Initialize options
       localStorage.game = 'bf4';
       localStorage.iconShowOffline = false;
-      localStorage.iconShowOnline = false;
+      localStorage.iconShowOnline = true;
       localStorage.iconShowIngame = true;
       localStorage.notifIsActivated = false;
-      localStorage.notifFrequency = 1;
+      localStorage.notifFrequency = 5;
     } else if (details.reason == 'update') {
       var version = chrome.runtime.getManifest().version;
       console.log("updated from " + details.previousVersion + " to " + version);
