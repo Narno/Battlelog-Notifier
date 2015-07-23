@@ -76,7 +76,7 @@
         "message": "Updates"
     },
     "optionsCheckboxNotifications": {
-        "message": "Displays notifications when you get new updates"
+        "message": "Displays a desktop notification when you get new updates"
     },
     "optionsSelectNotifications": {
         "message": "Check new updates each"
@@ -85,7 +85,7 @@
         "message": "minute(s)"
     },
     "optionsTestNotifications": {
-        "message": "Test notifications"
+        "message": "Send test notification"
     },
     "optionsHeaderAbout": {
         "message": "About"

@@ -76,7 +76,7 @@
         "message": "Mises à jour"
     },
     "optionsCheckboxNotifications": {
-        "message": "Affiche des notifications lorsque vous obtenez de nouvelles mises à jour"
+        "message": "Affiche une notification de bureau lorsque vous recevez de nouvelles mises à jour"
     },
     "optionsSelectNotifications": {
         "message": "Vérifiez les nouvelles mise à jour toutes les"
@@ -85,7 +85,7 @@
         "message": "minute(s)"
     },
     "optionsTestNotifications": {
-        "message": "Tester les notifications"
+        "message": "Envoyer une notification de test"
     },
     "optionsHeaderAbout": {
         "message": "A propos"

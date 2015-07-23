@@ -245,16 +245,24 @@
     return url.indexOf(getUpdateUrl(localStorage.game)) === 0;
   }
 
-  function openBattlelogHomeInTab() {
+  function openBattlelogHomeInTab(flag) {
     // check if Battle is already open
     chrome.tabs.getAllInWindow(undefined, function(tabs) {
       for (var i = 0, tab; tab = tabs[i]; i++) {
         if (tab.url && isBattlelogUrl(tab.url)) {
-          chrome.tabs.update(tab.id, {selected: true});
+          chrome.tabs.update(tab.id, {selected: true}, function(tab) {
+            if (flag) {
+              clickOnFlag();
+            }
+          });
           return;
         }
       }
-      chrome.tabs.create({url: getHomeUrl(localStorage.game)});
+      chrome.tabs.create({url: getHomeUrl(localStorage.game)}, function(tab) {
+        if (flag) {
+          clickOnFlag();
+        }
+      });
     });
   }
 
@@ -268,6 +276,18 @@
         }
       }
       chrome.tabs.create({url: getUpdateUrl(localStorage.game)});
+    });
+  }
+
+  function clickOnFlag() {
+    chrome.tabs.executeScript({
+      file: 'vendor/zepto.min.js',
+      runAt: 'document_end'
+    }, function() {
+      chrome.tabs.executeScript({
+        code: "$('#updates-icon').click();"
+        ,runAt: 'document_end'
+      }); 
     });
   }
 
@@ -299,17 +319,16 @@
   if (chrome.notifications) {
     // notification action
     chrome.notifications.onClicked.addListener(function () {
-      openBattlelogHomeInTab();
-      chrome.notifications.clear('showNotification', function(){});
+      chrome.notifications.clear('showNotification');
+      openBattlelogHomeInTab(true);
     });
     // notification button(s) action
     chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
       switch (buttonIndex) {
         case 0:
+          chrome.notifications.clear('showNotification');
           openBattlelogUpdatesInTab();
           break;
-        default:
-          chrome.notifications.clear('showNotification', function(){});
       }
     });
   }

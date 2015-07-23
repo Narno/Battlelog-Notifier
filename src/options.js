@@ -53,11 +53,23 @@
       } else {
         inputGame.value = localStorage.getItem('game');
       }
+      // iconShowOffline
+      if (localStorage.getItem('iconShowOffline') === null) {
+        inputIconShowOffline.checked = false;
+      } else {
+        inputIconShowOffline.checked = (localStorage.getItem('iconShowOffline') === 'true');
+      }
+      // iconShowOnline
+      if (localStorage.getItem('iconShowOnline') === null) {
+        inputIconShowOnline.checked = true;
+      } else {
+        inputIconShowOnline.checked = (localStorage.getItem('iconShowOnline') === 'true');
+      }
       // iconShowIngame
       if (localStorage.getItem('iconShowIngame') === null) {
         inputIconShowIngame.checked = true;
       } else {
-        inputIconShowIngame.checked = localStorage.getItem('iconShowIngame');
+        inputIconShowIngame.checked = (localStorage.getItem('iconShowIngame') === 'true');
       }
       // notifIsActivated
       if (localStorage.getItem('notifIsActivated') === null) {
