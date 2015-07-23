@@ -132,12 +132,12 @@
             }
             break;
           case 'offline':
+            color = colorOffline;
             if (localStorage.iconShowOffline == 'false') {
               count = '0';
               badgeText = false;
             }
-          default:
-              color = colorOffline;
+            break;
         }
         if (badgeText) {
           renderBadge((count !== '0' ? count : ''), color, chrome.i18n.getMessage('browserActionDefaultTitle', [count, statusLabel]));
@@ -294,8 +294,8 @@
       runAt: 'document_end'
     }, function() {
       chrome.tabs.executeScript({
-        code: "$('#updates-icon').click();"
-        ,runAt: 'document_end'
+        code: "$('#updates-icon').click();",
+        runAt: 'document_end'
       }); 
     });
   }
