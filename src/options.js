@@ -31,6 +31,7 @@
     var inputIconShowIngame = document.getElementById('iconShowIngame');
     var inputNotifIsActivated = document.getElementById('notifIsActivated');
     var inputNotifFrequency = document.getElementById('notifFrequency');
+    var inputNotifIsSound = document.getElementById('notifIsSound');
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
@@ -83,6 +84,12 @@
       } else {
         inputNotifFrequency.value = localStorage.getItem('notifFrequency');
       }
+      // notifIsSound
+      if (localStorage.getItem('notifIsSound') === null) {
+        inputNotifIsSound.checked = true;
+      } else {
+        inputNotifIsSound.checked = (localStorage.getItem('notifIsSound') === 'true');
+      }
     }
     loadOptions();
 
@@ -94,6 +101,7 @@
       localStorage.setItem('iconShowIngame', inputIconShowIngame.checked);
       localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
       localStorage.setItem('notifFrequency', inputNotifFrequency.value);
+      localStorage.setItem('notifIsSound', inputNotifIsSound.checked);
       // success message
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');
@@ -122,6 +130,10 @@
       chrome.runtime.sendMessage({do: 'shownotification'});
     });
     document.getElementById('notifFrequency').addEventListener('change', function () {
+      saveOptions();
+      chrome.runtime.sendMessage({do: 'shownotification'});
+    });
+    document.getElementById('notifIsSound').addEventListener('change', function () {
       saveOptions();
       chrome.runtime.sendMessage({do: 'shownotification'});
     });

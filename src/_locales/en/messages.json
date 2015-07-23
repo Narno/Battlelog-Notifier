@@ -84,6 +84,9 @@
     "optionsMinutes": {
         "message": "minute(s)"
     },
+    "optionsCheckboxNotificationSound": {
+        "message": "Play sound"
+    },
     "optionsTestNotifications": {
         "message": "Send test notification"
     },

@@ -151,12 +151,16 @@
   }
 
   function showNotification() {
+    var sound = false;
     if (!chrome.notifications || localStorage.notifIsActivated != 'true') {
       return;
     }
+    if (localStorage.notifIsSound == 'true') {
+      sound = true;
+    }
     new NotificationsCount(function (count) {
       if (count !== false && count > 0) {
-        renderNotification(count);
+        renderNotification(count, sound);
       }
     });
   }
@@ -210,7 +214,7 @@
   }
 
   // notitifcation renderer
-  function renderNotification(count) {
+  function renderNotification(count, sound) {
     var opt = {
       type: "basic",
       title: chrome.i18n.getMessage('notificationTitle'),
@@ -227,6 +231,11 @@
       iconUrl: "icon-48.png"
     };
     var notification = chrome.notifications.create('showNotification', opt, function() {
+      if (sound) {
+        var notifAudio = new Audio();
+        notifAudio.src = 'knock_brush.mp3';
+        notifAudio.play();
+      }
       if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError.message);
         if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
@@ -351,6 +360,7 @@
       localStorage.iconShowIngame = true;
       localStorage.notifIsActivated = false;
       localStorage.notifFrequency = 5;
+      localStorage.notifIsSound = true;
     } else if (details.reason == 'update') {
       console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
     }
@@ -367,7 +377,14 @@
         showNotification();
         break;
       case 'shownotification_test':
-        renderNotification(Math.floor((Math.random()*10)+1));
+        var sound = false;
+        if (!chrome.notifications) {
+          return;
+        }
+        if (localStorage.notifIsSound == 'true') {
+          sound = true;
+        }
+        renderNotification(Math.floor((Math.random()*10)+1), sound);
         break;
     }
   });
