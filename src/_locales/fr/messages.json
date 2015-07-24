@@ -91,7 +91,7 @@
         "message": "Envoyer une notification de test"
     },
     "optionsHeaderAdvanced": {
-        "message": "Avancée"
+        "message": "Avancé"
     },
     "optionsBgPermission": {
         "message": "Exécuter en arrière plan lorsque le navigateur est fermé"
