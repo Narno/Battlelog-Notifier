@@ -24,7 +24,7 @@ gulp.task('clean', function() {
 gulp.task('copy', function() {
     gulp.src('src/*.png')
         .pipe(gulp.dest('build'));
-    gulp.src('src/*.mp3')
+    gulp.src('src/*.ogg')
         .pipe(gulp.dest('build'));
     gulp.src('src/_locales/**')
         .pipe(gulp.dest('build/_locales'));

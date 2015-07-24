@@ -233,7 +233,7 @@
     var notification = chrome.notifications.create('showNotification', opt, function() {
       if (sound) {
         var notifAudio = new Audio();
-        notifAudio.src = 'knock_brush.mp3';
+        notifAudio.src = 'UI_Bleep_Notification.ogg';
         notifAudio.play();
       }
       if (chrome.runtime.lastError) {
