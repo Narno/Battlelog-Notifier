@@ -14,6 +14,8 @@
   var colorOnline  = [120, 199, 83, 255];
   var colorIngame  = [96, 192, 246, 255];
 
+  var soundBleep = 'UI_Bleep_Notification.ogg';
+
   var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/master/test/fixtures/';
   var COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
   var COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
@@ -232,9 +234,7 @@
     };
     var notification = chrome.notifications.create('showNotification', opt, function() {
       if (sound) {
-        var notifAudio = new Audio();
-        notifAudio.src = 'UI_Bleep_Notification.ogg';
-        notifAudio.play();
+        playSound();
       }
       if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError.message);
@@ -244,6 +244,12 @@
         return;
       }
     });
+  }
+
+  function playSound() {
+    var notifAudio = new Audio();
+    notifAudio.src = soundBleep;
+    notifAudio.play();
   }
 
   function isBattlelogUrl(url) {
