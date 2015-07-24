@@ -90,6 +90,12 @@
     "optionsTestNotifications": {
         "message": "Envoyer une notification de test"
     },
+    "optionsHeaderAdvanced": {
+        "message": "Avancée"
+    },
+    "optionsBgPermission": {
+        "message": "Exécuter en arrière plan lorsque le navigateur est fermé"
+    },
     "optionsHeaderAbout": {
         "message": "A propos"
     },

@@ -26,6 +26,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     var inputGame = document.getElementById('game');
+    var inputBgPermission = document.getElementById('bgPermission');
     var inputIconShowOffline = document.getElementById('iconShowOffline');
     var inputIconShowOnline = document.getElementById('iconShowOnline');
     var inputIconShowIngame = document.getElementById('iconShowIngame');
@@ -53,6 +54,12 @@
         inputGame.value = 'bf4';
       } else {
         inputGame.value = localStorage.getItem('game');
+      }
+      // bgPermission
+      if (localStorage.getItem('bgPermission') === null) {
+        inputBgPermission.checked = false;
+      } else {
+        inputBgPermission.checked = (localStorage.getItem('bgPermission') === 'true');
       }
       // iconShowOffline
       if (localStorage.getItem('iconShowOffline') === null) {
@@ -96,6 +103,7 @@
     // Save options
     function saveOptions() {
       localStorage.setItem('game', inputGame.value);
+      localStorage.setItem('bgPermission', inputBgPermission.checked);
       localStorage.setItem('iconShowOffline', inputIconShowOffline.checked);
       localStorage.setItem('iconShowOnline', inputIconShowOnline.checked);
       localStorage.setItem('iconShowIngame', inputIconShowIngame.checked);
@@ -112,6 +120,40 @@
     document.getElementById('game').addEventListener('change', function () {
       saveOptions();
       chrome.runtime.sendMessage({do: 'updatebadge'});
+    });
+    document.getElementById('bgPermission').addEventListener('change', function () {
+      var permission = {'permissions': ['background']};
+      /*
+      chrome.permissions.contains(permission, function(result) {
+        if (result) {
+          alert('granted');
+        } else {
+          alert('not granted');
+        }
+      });
+      */
+      if (inputBgPermission.checked) {
+        chrome.permissions.request(permission, function(granted) {
+          /*
+          if (granted) {
+            alert('granted');
+          } else {
+            alert('not granted');
+          }
+          */
+        });
+      } else {
+        chrome.permissions.remove(permission, function(removed) {
+          /*
+          if (removed) {
+            alert('removed');
+          } else {
+            alert('not removed');
+          }
+          */
+        });
+      }
+      saveOptions();
     });
     document.getElementById('iconShowOffline').addEventListener('change', function () {
       saveOptions();

@@ -90,6 +90,12 @@
     "optionsTestNotifications": {
         "message": "Send test notification"
     },
+    "optionsHeaderAdvanced": {
+        "message": "Advanced"
+    },
+    "optionsBgPermission": {
+        "message": "Running in bakground when the browser is closed"
+    },
     "optionsHeaderAbout": {
         "message": "About"
     },

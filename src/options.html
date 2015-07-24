@@ -34,6 +34,7 @@
         <ul class="menu">
           <li class="selected"><a href="#general" data-message="optionsHeaderGeneral">General</a></li>
           <li id="li_notifications"><a href="#notifications" data-message="optionsHeaderNotifications">Notifications</a></li>
+          <li><a href="#advanced" data-message="optionsHeaderAdvanced">Advanced</a></li>
           <li><a href="#about" data-message="optionsHeaderAbout">About</a></li>
         </ul>
         <div id="success_message" class="alert" data-message="optionsSaved">Options saved</div>
@@ -107,6 +108,19 @@
             </section>
           </div>
         </div><!-- /notifications -->
+        <div id="advanced">
+          <header>
+            <h1 data-message="optionsHeaderAdvanced">Advanced</h1>
+          </header>
+          <div class="content">
+            <div class="controls">
+              <div class="checkbox">
+                <input type="checkbox" id="bgPermission">
+                <label for="bgPermission" data-message="optionsBgPermission">Background</label>
+              </div>
+            </div>
+          </div><!-- /content -->
+        </div><!-- /advanced -->
         <div id="about">
           <header>
             <h1 data-message="optionsHeaderAbout">About</h1>
