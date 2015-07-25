@@ -47,6 +47,21 @@
     },
     "notificationButton2Title": {
         "message": "Voir toutes les mises à jour"
+    },"notificationFriendsTitle": {
+        "message": "Battlelog friends"
+    },
+    "notificationFriendsMessage": {
+        "message": "$count$ ami(s) est maintenant $status$",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "7"
+            },
+            "status": {
+                "content": "$2",
+                "example": "online"
+            }
+        }
     },
     "optionsSaved": {
         "message": "Options enregistrées"

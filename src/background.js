@@ -76,6 +76,25 @@
                 statusLabel = chrome.i18n.getMessage('statusOffline');
               }
             }
+            // notification
+            if (localStorage.getItem('countIngame') !== null) {
+              var friendsIngameCountPrev = localStorage.getItem('countIngame');
+              if (friendsIngameCount > friendsIngameCountPrev) {
+                renderFriendsNotification((friendsIngameCount - friendsIngameCountPrev).toString(), chrome.i18n.getMessage('statusIngame'));
+              }
+            }
+            if (friendsIngameCount > 0) {
+              localStorage.setItem('countIngame', friendsIngameCount);
+            }
+            if (localStorage.getItem('countOnline') !== null) {
+              var friendsOnlineCountPrev = localStorage.getItem('countOnline');
+              if (friendsOnlineCount > friendsOnlineCountPrev) {
+                renderFriendsNotification((friendsOnlineCount - friendsOnlineCountPrev).toString(), chrome.i18n.getMessage('statusOnline'));
+              }
+            }
+            if (friendsOnlineCount > 0) {
+              localStorage.setItem('countOnline', friendsOnlineCount);
+            }
           // EA Origin not available
           } else {
             count = '0';
@@ -162,7 +181,7 @@
     }
     new NotificationsCount(function (count) {
       if (count !== false && count > 0) {
-        renderNotification(count, sound);
+        renderUpdatesNotification(count, sound);
       }
     });
   }
@@ -215,8 +234,8 @@
     });
   }
 
-  // notitifcation renderer
-  function renderNotification(count, sound) {
+  // updates notitifcation renderer
+  function renderUpdatesNotification(count, sound) {
     var opt = {
       type: "basic",
       title: chrome.i18n.getMessage('notificationTitle'),
@@ -243,6 +262,21 @@
         }
         return;
       }
+    });
+  }
+
+  // friends notitifcation renderer
+  function renderFriendsNotification(count, status) {
+    var opt = {
+      type: "basic",
+      title: chrome.i18n.getMessage('notificationFriendsTitle'),
+      message: chrome.i18n.getMessage('notificationFriendsMessage', [count, status]),
+      iconUrl: "icon-48.png"
+    };
+    var notification = chrome.notifications.create('friendsNotification', opt, function(id) {
+      setTimeout(function() {
+        chrome.notifications.clear(id);
+      }, 4000);
     });
   }
 
@@ -390,7 +424,7 @@
         if (localStorage.notifIsSound == 'true') {
           sound = true;
         }
-        renderNotification(Math.floor((Math.random()*10)+1), sound);
+        renderUpdatesNotification(Math.floor((Math.random()*10)+1), sound);
         break;
     }
   });

@@ -48,6 +48,22 @@
     "notificationButton2Title": {
         "message": "View all updates"
     },
+    "notificationFriendsTitle": {
+        "message": "Battlelog friends"
+    },
+    "notificationFriendsMessage": {
+        "message": "$count$ friend(s) is now $status$",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "7"
+            },
+            "status": {
+                "content": "$2",
+                "example": "online"
+            }
+        }
+    },
     "optionsSaved": {
         "message": "Options saved"
     },
