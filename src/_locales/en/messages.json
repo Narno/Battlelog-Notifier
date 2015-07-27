@@ -30,10 +30,10 @@
     "browserActionErrorTitle": {
         "message": "You should be logged into your Battlelog account"
     },
-    "notificationTitle": {
+    "notificationUpdatesTitle": {
         "message": "Battlelog updates"
     },
-    "notificationMessage": {
+    "notificationUpdatesMessage": {
         "message": "You got $count$ new updates",
         "placeholders": {
             "count": {
@@ -47,6 +47,22 @@
     },
     "notificationButton2Title": {
         "message": "View all updates"
+    },
+    "notificationFriendsTitle": {
+        "message": "Battlelog friends"
+    },
+    "notificationFriendsMessage": {
+        "message": "Friend(s) $status$: $count$",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "7"
+            },
+            "status": {
+                "content": "$2",
+                "example": "online"
+            }
+        }
     },
     "optionsSaved": {
         "message": "Options saved"
@@ -72,23 +88,32 @@
     "optionsHeaderNotifications": {
         "message": "Notifications"
     },
-    "optionsSectionUpdatesHeader": {
+    "optionsSectionNotificationsUpdatesHeader": {
         "message": "Updates"
     },
-    "optionsCheckboxNotifications": {
+    "optionsCheckboxNotificationsUpdates": {
         "message": "Displays a desktop notification when you get new updates"
     },
-    "optionsSelectNotifications": {
+    "optionsSelectNotificationsUpdates": {
         "message": "Check new updates each"
     },
-    "optionsMinutes": {
-        "message": "minute(s)"
-    },
-    "optionsCheckboxNotificationSound": {
+    "optionsCheckboxNotificationUpdatesSound": {
         "message": "Play sound"
     },
     "optionsTestNotifications": {
         "message": "Send test notification"
+    },
+    "optionsSectionNotificationsFriendsHeader": {
+        "message": "Friends"
+    },
+    "optionsSectionNotificationsFriends": {
+        "message": "Displays a desktop notification with count of friends"
+    },
+    "optionsCheckboxNotificationsFriends": {
+        "message": "Activated"
+    },
+    "optionsMinutes": {
+        "message": "minute(s)"
     },
     "optionsHeaderAdvanced": {
         "message": "Advanced"

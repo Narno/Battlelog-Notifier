@@ -14,6 +14,8 @@
   var colorOnline  = [120, 199, 83, 255];
   var colorIngame  = [96, 192, 246, 255];
 
+  var soundBleep = 'UI_Bleep_Notification.ogg';
+
   var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/master/test/fixtures/';
   var COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
   var COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
@@ -74,6 +76,29 @@
                 statusLabel = chrome.i18n.getMessage('statusOffline');
               }
             }
+            // desktop notification
+            // @todo move code
+            if (localStorage.notifFriendsIsActivated) {
+              if (localStorage.getItem('countIngame') !== null) {
+                var friendsIngameCountPrev = localStorage.getItem('countIngame');
+                if (friendsIngameCount > friendsIngameCountPrev) {
+                  renderFriendsNotification(friendsIngameCount.toString(), chrome.i18n.getMessage('statusIngame'));
+                }
+              }
+              if (friendsIngameCount > 0) {
+                localStorage.setItem('countIngame', friendsIngameCount);
+              }
+              if (localStorage.getItem('countOnline') !== null) {
+                var friendsOnlineCountPrev = localStorage.getItem('countOnline');
+                if (friendsOnlineCount > friendsOnlineCountPrev) {
+                  renderFriendsNotification(friendsOnlineCount.toString(), chrome.i18n.getMessage('statusOnline'));
+                }
+              }
+              if (friendsOnlineCount > 0) {
+                localStorage.setItem('countOnline', friendsOnlineCount);
+              }
+            }
+            //
           // EA Origin not available
           } else {
             count = '0';
@@ -150,17 +175,17 @@
     });
   }
 
-  function showNotification() {
+  function showNotificationUpdates() {
     var sound = false;
-    if (!chrome.notifications || localStorage.notifIsActivated != 'true') {
+    if (!chrome.notifications || localStorage.notifUpdatesIsActivated != 'true') {
       return;
     }
-    if (localStorage.notifIsSound == 'true') {
+    if (localStorage.notifUpdatesIsSound == 'true') {
       sound = true;
     }
     new NotificationsCount(function (count) {
       if (count !== false && count > 0) {
-        renderNotification(count, sound);
+        renderUpdatesNotification(count, sound);
       }
     });
   }
@@ -213,12 +238,12 @@
     });
   }
 
-  // notitifcation renderer
-  function renderNotification(count, sound) {
+  // updates notitifcation renderer
+  function renderUpdatesNotification(count, sound) {
     var opt = {
       type: "basic",
-      title: chrome.i18n.getMessage('notificationTitle'),
-      message: chrome.i18n.getMessage('notificationMessage', [count]),
+      title: chrome.i18n.getMessage('notificationUpdatesTitle'),
+      message: chrome.i18n.getMessage('notificationUpdatesMessage', [count]),
       iconUrl: "icon-48.png",
       buttons: [
         { title: chrome.i18n.getMessage('notificationButton2Title') },
@@ -226,24 +251,43 @@
     };
     var optOpera = {
       type: "basic",
-      title: chrome.i18n.getMessage('notificationTitle'),
-      message: chrome.i18n.getMessage('notificationMessage', [count]),
+      title: chrome.i18n.getMessage('notificationUpdatesTitle'),
+      message: chrome.i18n.getMessage('notificationUpdatesMessage', [count]),
       iconUrl: "icon-48.png"
     };
-    var notification = chrome.notifications.create('showNotification', opt, function() {
+    var notification = chrome.notifications.create('showNotificationUpdates', opt, function() {
       if (sound) {
-        var notifAudio = new Audio();
-        notifAudio.src = 'UI_Bleep_Notification.ogg';
-        notifAudio.play();
+        playSound();
       }
       if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError.message);
         if (chrome.runtime.lastError.message == "Adding buttons to notifications is not supported.") {
-          var notification = chrome.notifications.create('showNotification', optOpera, function() {});
+          var notification = chrome.notifications.create('showNotificationUpdates', optOpera, function() {});
         }
         return;
       }
     });
+  }
+
+  // friends notitifcation renderer
+  function renderFriendsNotification(count, status) {
+    var opt = {
+      type: "basic",
+      title: chrome.i18n.getMessage('notificationFriendsTitle'),
+      message: chrome.i18n.getMessage('notificationFriendsMessage', [count, status]),
+      iconUrl: "icon-48.png"
+    };
+    var notification = chrome.notifications.create('friendsNotification' + status, opt, function(id) {
+      setTimeout(function() {
+        chrome.notifications.clear(id);
+      }, 4000);
+    });
+  }
+
+  function playSound() {
+    var notifAudio = new Audio();
+    notifAudio.src = soundBleep;
+    notifAudio.play();
   }
 
   function isBattlelogUrl(url) {
@@ -306,36 +350,36 @@
 
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
-  if (localStorage.notifIsActivated == 'true' && localStorage.notifFrequency) {
-    chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifFrequency)});
+  if (localStorage.notifUpdatesIsActivated == 'true' && localStorage.notifUpdatesFrequency) {
+    chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifUpdatesFrequency)});
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
     if (alarm.name == 'badge') {
-      chrome.runtime.sendMessage({do: 'updatebadge'});
+      chrome.runtime.sendMessage({do: 'update_badge'});
     }
     if (alarm.name == 'notification') {
-      showNotification();
+      showNotificationUpdates();
     }
   });
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-    chrome.runtime.sendMessage({do: 'updatebadge'});
-    chrome.runtime.sendMessage({do: 'shownotification'});
+    chrome.runtime.sendMessage({do: 'update_badge'});
+    chrome.runtime.sendMessage({do: 'show_updates_notification'});
     openBattlelogHomeInTab();
   });
 
   if (chrome.notifications) {
     // notification action
     chrome.notifications.onClicked.addListener(function () {
-      chrome.notifications.clear('showNotification');
+      chrome.notifications.clear('showNotificationUpdates');
       openBattlelogHomeInTab(true);
     });
     // notification button(s) action
     chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
       switch (buttonIndex) {
         case 0:
-          chrome.notifications.clear('showNotification');
+          chrome.notifications.clear('showNotificationUpdates');
           openBattlelogUpdatesInTab();
           break;
       }
@@ -358,33 +402,44 @@
       localStorage.iconShowOffline = false;
       localStorage.iconShowOnline = true;
       localStorage.iconShowIngame = true;
-      localStorage.notifIsActivated = false;
-      localStorage.notifFrequency = 5;
-      localStorage.notifIsSound = true;
+      localStorage.notifUpdatesIsActivated = false;
+      localStorage.notifUpdatesFrequency = 5;
+      localStorage.notifUpdatesIsSound = true;
+      localStorage.notifFriendsIsActivated = false;
     } else if (details.reason == 'update') {
       console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
     }
-    chrome.runtime.sendMessage({do: 'updatebadge'});
+    chrome.runtime.sendMessage({do: 'update_badge'});
   });
 
   // on message update badge
   chrome.runtime.onMessage.addListener(function (message, sender, response) {
     switch (message.do) {
-      case 'updatebadge':
+      case 'update_badge':
         updateBadge();
         break;
-      case 'shownotification':
-        showNotification();
+      case 'show_updates_notification':
+        showNotificationUpdates();
         break;
-      case 'shownotification_test':
+      case 'show_updates_notification_test':
         var sound = false;
         if (!chrome.notifications) {
           return;
         }
-        if (localStorage.notifIsSound == 'true') {
+        if (localStorage.notifUpdatesIsSound == 'true') {
           sound = true;
         }
-        renderNotification(Math.floor((Math.random()*10)+1), sound);
+        renderUpdatesNotification(Math.floor((Math.random()*10)+1), sound);
+        break;
+      case 'show_friends_notification_test':
+        if (!chrome.notifications) {
+          return;
+        }
+        var statusArray = [
+          chrome.i18n.getMessage('statusIngame'),
+          chrome.i18n.getMessage('statusOnline')
+        ];
+        renderFriendsNotification(Math.floor((Math.random()*10)+1), statusArray[Math.floor(Math.random()*statusArray.length)]);
         break;
     }
   });

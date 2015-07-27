@@ -30,9 +30,10 @@
     var inputIconShowOffline = document.getElementById('iconShowOffline');
     var inputIconShowOnline = document.getElementById('iconShowOnline');
     var inputIconShowIngame = document.getElementById('iconShowIngame');
-    var inputNotifIsActivated = document.getElementById('notifIsActivated');
-    var inputNotifFrequency = document.getElementById('notifFrequency');
-    var inputNotifIsSound = document.getElementById('notifIsSound');
+    var inputNotifUpdatesIsActivated = document.getElementById('notifUpdatesIsActivated');
+    var inputNotifUpdatesFrequency = document.getElementById('notifUpdatesFrequency');
+    var inputNotifUpdatesIsSound = document.getElementById('notifUpdatesIsSound');
+    var inputNotifFriendsIsActivated = document.getElementById('notifFriendsIsActivated');
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
@@ -79,23 +80,29 @@
       } else {
         inputIconShowIngame.checked = (localStorage.getItem('iconShowIngame') === 'true');
       }
-      // notifIsActivated
-      if (localStorage.getItem('notifIsActivated') === null) {
-        inputNotifIsActivated.checked = false;
+      // notifUpdatesIsActivated
+      if (localStorage.getItem('notifUpdatesIsActivated') === null) {
+        inputNotifUpdatesIsActivated.checked = false;
       } else {
-        inputNotifIsActivated.checked = (localStorage.getItem('notifIsActivated') === 'true');
+        inputNotifUpdatesIsActivated.checked = (localStorage.getItem('notifUpdatesIsActivated') === 'true');
       }
-      // notifFrequency
-      if (localStorage.getItem('notifFrequency') === null) {
-        inputNotifFrequency.value = '1';
+      // notifUpdatesFrequency
+      if (localStorage.getItem('notifUpdatesFrequency') === null) {
+        inputNotifUpdatesFrequency.value = '1';
       } else {
-        inputNotifFrequency.value = localStorage.getItem('notifFrequency');
+        inputNotifUpdatesFrequency.value = localStorage.getItem('notifUpdatesFrequency');
       }
-      // notifIsSound
-      if (localStorage.getItem('notifIsSound') === null) {
-        inputNotifIsSound.checked = true;
+      // notifUpdatesIsSound
+      if (localStorage.getItem('notifUpdatesIsSound') === null) {
+        inputNotifUpdatesIsSound.checked = true;
       } else {
-        inputNotifIsSound.checked = (localStorage.getItem('notifIsSound') === 'true');
+        inputNotifUpdatesIsSound.checked = (localStorage.getItem('notifUpdatesIsSound') === 'true');
+      }
+      // notifFriendsIsActivated
+      if (localStorage.getItem('notifFriendsIsActivated') === null) {
+        inputNotifFriendsIsActivated.checked = false;
+      } else {
+        inputNotifFriendsIsActivated.checked = (localStorage.getItem('notifFriendsIsActivated') === 'true');
       }
     }
     loadOptions();
@@ -107,9 +114,10 @@
       localStorage.setItem('iconShowOffline', inputIconShowOffline.checked);
       localStorage.setItem('iconShowOnline', inputIconShowOnline.checked);
       localStorage.setItem('iconShowIngame', inputIconShowIngame.checked);
-      localStorage.setItem('notifIsActivated', inputNotifIsActivated.checked);
-      localStorage.setItem('notifFrequency', inputNotifFrequency.value);
-      localStorage.setItem('notifIsSound', inputNotifIsSound.checked);
+      localStorage.setItem('notifUpdatesIsActivated', inputNotifUpdatesIsActivated.checked);
+      localStorage.setItem('notifUpdatesFrequency', inputNotifUpdatesFrequency.value);
+      localStorage.setItem('notifUpdatesIsSound', inputNotifUpdatesIsSound.checked);
+      localStorage.setItem('notifFriendsIsActivated', inputNotifFriendsIsActivated.checked);
       // success message
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');
@@ -119,7 +127,7 @@
     }
     document.getElementById('game').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'updatebadge'});
+      chrome.runtime.sendMessage({do: 'update_badge'});
     });
     document.getElementById('bgPermission').addEventListener('change', function () {
       var permission = {'permissions': ['background']};
@@ -157,33 +165,44 @@
     });
     document.getElementById('iconShowOffline').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'updatebadge'});
+      chrome.runtime.sendMessage({do: 'update_badge'});
     });
     document.getElementById('iconShowOnline').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'updatebadge'});
+      chrome.runtime.sendMessage({do: 'update_badge'});
     });
     document.getElementById('iconShowIngame').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'updatebadge'});
+      chrome.runtime.sendMessage({do: 'update_badge'});
     });
-    document.getElementById('notifIsActivated').addEventListener('change', function () {
+    document.getElementById('notifUpdatesIsActivated').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'shownotification'});
+      chrome.runtime.sendMessage({do: 'show_updates_notification'});
     });
-    document.getElementById('notifFrequency').addEventListener('change', function () {
+    document.getElementById('notifUpdatesFrequency').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'shownotification'});
+      chrome.runtime.sendMessage({do: 'show_updates_notification'});
     });
-    document.getElementById('notifIsSound').addEventListener('change', function () {
+    document.getElementById('notifUpdatesIsSound').addEventListener('change', function () {
       saveOptions();
-      chrome.runtime.sendMessage({do: 'shownotification'});
+      chrome.runtime.sendMessage({do: 'show_updates_notification'});
+    });
+    document.getElementById('notifFriendsIsActivated').addEventListener('change', function () {
+      saveOptions();
+      chrome.runtime.sendMessage({do: 'update_badge'});
     });
 
-    // Notification test
-    document.getElementById('notifTest').addEventListener('click', function () {
+    // Updates notification test
+    document.getElementById('notifUpdatesTest').addEventListener('click', function () {
       if (chrome.notifications) {
-        chrome.runtime.sendMessage({do: 'shownotification_test'});
+        chrome.runtime.sendMessage({do: 'show_updates_notification_test'});
+        return;
+      }
+    });
+    // Friends notification test
+    document.getElementById('notifFriendsTest').addEventListener('click', function () {
+      if (chrome.notifications) {
+        chrome.runtime.sendMessage({do: 'show_friends_notification_test'});
         return;
       }
     });
@@ -197,7 +216,6 @@
 
     // Extension version in about page
     var manifest = chrome.runtime.getManifest();
-    //console.log(manifest.version);
     $(function() {
       $('#version').html(manifest.version);
     });

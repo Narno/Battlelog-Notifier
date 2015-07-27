@@ -76,36 +76,43 @@
             <h1 data-message="optionsHeaderNotifications">Notifications</h1>
           </header>
           <div class="content">
-            <section>
-              <h3 data-message="optionsSectionUpdatesHeader">Updates</h3>
+            <section><!-- updates -->
+              <h3 data-message="optionsSectionNotificationsUpdatesHeader">Updates</h3>
+              <p data-message="optionsSectionNotificationsUpdates">Displays a desktop notification when you get new updates</p>
               <div class="checkbox">
-                <input type="checkbox" id="notifIsActivated">
-                <label for="notifIsActivated" data-message="optionsCheckboxNotifications">Displays a desktop notification when you get new updates</label>
+                <input type="checkbox" id="notifUpdatesIsActivated">
+                <label for="notifUpdatesIsActivated" data-message="optionsCheckboxNotificationsUpdates">Activated</label>
               </div>
               <div>
-                <label for="notifFrequency" data-message="optionsSelectNotifications">Check new updates each</label>
-                <select id="notifFrequency">
+                <label for="notifUpdatesFrequency" data-message="optionsSelectNotificationsUpdates">Check new updates each</label>
+                <select id="notifUpdatesFrequency">
                   <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
                   <option>5</option>
                   <option>10</option>
                   <option>15</option>
-                  <option>20</option>
-                  <option>25</option>
                   <option>30</option>
                 </select>
                 <span data-message="optionsMinutes">minute(s)</span>.
               </div>
               <div class="checkbox">
-                <input type="checkbox" id="notifIsSound">
-                <label for="notifIsSound" data-message="optionsCheckboxNotificationSound">Play sound</label>
+                <input type="checkbox" id="notifUpdatesIsSound">
+                <label for="notifUpdatesIsSound" data-message="optionsCheckboxNotificationSound">Play sound</label>
               </div>
               <div style="margin-top: 10px;">
-                <button id="notifTest" data-message="optionsTestNotifications">Send test notification</button>
+                <button id="notifUpdatesTest" data-message="optionsTestNotifications">Send test notification</button>
               </div>
-            </section>
+            </section><!-- /updates -->
+            <section><!-- friends -->
+              <h3 data-message="optionsSectionNotificationsFriendsHeader">Friends</h3>
+              <p data-message="optionsSectionNotificationsFriends">Displays a desktop notification with count of friends</p>
+              <div class="checkbox">
+                <input type="checkbox" id="notifFriendsIsActivated">
+                <label for="notifFriendsIsActivated" data-message="optionsCheckboxNotificationsFriends">Activated</label>
+              </div>
+              <div style="margin-top: 10px;">
+                <button id="notifFriendsTest" data-message="optionsTestNotifications">Send test notification</button>
+              </div>
+            </section><!-- /friends -->
           </div>
         </div><!-- /notifications -->
         <div id="advanced">
