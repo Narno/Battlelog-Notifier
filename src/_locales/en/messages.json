@@ -34,7 +34,7 @@
         "message": "Battlelog updates"
     },
     "notificationUpdatesMessage": {
-        "message": "You got $count$ new updates",
+        "message": "$count$ new update(s)",
         "placeholders": {
             "count": {
                 "content": "$1",
@@ -52,7 +52,7 @@
         "message": "Battlelog friends"
     },
     "notificationFriendsMessage": {
-        "message": "Friend(s) $status$: $count$",
+        "message": "$count$ friend(s) $status$",
         "placeholders": {
             "count": {
                 "content": "$1",

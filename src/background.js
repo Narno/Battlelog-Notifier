@@ -410,6 +410,7 @@
       console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
     }
     chrome.runtime.sendMessage({do: 'update_badge'});
+    chrome.tabs.create({url: chrome.extension.getURL('options.html')});
   });
 
   // on message update badge

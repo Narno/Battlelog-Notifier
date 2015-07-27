@@ -34,7 +34,7 @@
         "message": "Mises à jour Battlelog"
     },
     "notificationUpdatesMessage": {
-        "message": "Vous avez $count$ nouvelles mises à jour",
+        "message": "$count$ nouvelle(s) mise(s) à jour",
         "placeholders": {
             "count": {
                 "content": "$1",
@@ -51,7 +51,7 @@
         "message": "Amis Battlelog"
     },
     "notificationFriendsMessage": {
-        "message": "Ami(s) $status$ : $count$",
+        "message": "$count$ ami(s) $status$",
         "placeholders": {
             "count": {
                 "content": "$1",
