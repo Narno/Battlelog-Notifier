@@ -30,10 +30,10 @@
     "browserActionErrorTitle": {
         "message": "Vous devez être connecté à votre compte Battlelog"
     },
-    "notificationTitle": {
+    "notificationUpdatesTitle": {
         "message": "Mises à jour Battlelog"
     },
-    "notificationMessage": {
+    "notificationUpdatesMessage": {
         "message": "Vous avez $count$ nouvelles mises à jour",
         "placeholders": {
             "count": {
@@ -48,10 +48,10 @@
     "notificationButton2Title": {
         "message": "Voir toutes les mises à jour"
     },"notificationFriendsTitle": {
-        "message": "Battlelog friends"
+        "message": "Amis Battlelog"
     },
     "notificationFriendsMessage": {
-        "message": "$count$ ami(s) est maintenant $status$",
+        "message": "Ami(s) $status$ : $count$",
         "placeholders": {
             "count": {
                 "content": "$1",
@@ -87,23 +87,35 @@
     "optionsHeaderNotifications": {
         "message": "Notifications"
     },
-    "optionsSectionUpdatesHeader": {
+    "optionsSectionNotificationsUpdatesHeader": {
         "message": "Mises à jour"
     },
-    "optionsCheckboxNotifications": {
+    "optionsSectionNotificationsUpdates": {
         "message": "Affiche une notification de bureau lorsque vous recevez de nouvelles mises à jour"
     },
-    "optionsSelectNotifications": {
-        "message": "Vérifiez les nouvelles mise à jour toutes les"
+    "optionsCheckboxNotificationsUpdates": {
+        "message": "Activé"
     },
-    "optionsMinutes": {
-        "message": "minute(s)"
+    "optionsSelectNotificationsUpdates": {
+        "message": "Vérifiez les nouvelles mise à jour toutes les"
     },
     "optionsCheckboxNotificationSound": {
         "message": "Emettre un son"
     },
     "optionsTestNotifications": {
         "message": "Envoyer une notification de test"
+    },
+    "optionsSectionNotificationsFriendsHeader": {
+        "message": "Amis"
+    },
+    "optionsSectionNotificationsFriends": {
+        "message": "Affiche une notification de bureau avec le nombre d'amis"
+    },
+    "optionsCheckboxNotificationsFriends": {
+        "message": "Activé"
+    },
+    "optionsMinutes": {
+        "message": "minute(s)"
     },
     "optionsHeaderAdvanced": {
         "message": "Avancé"
