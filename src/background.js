@@ -367,17 +367,21 @@
 
   if (chrome.notifications) {
     // notification action
-    chrome.notifications.onClicked.addListener(function () {
-      chrome.notifications.clear('showNotificationUpdates');
-      openBattlelogHomeInTab(true);
+    chrome.notifications.onClicked.addListener(function (notificationId) {
+      if (notificationId == 'showNotificationUpdates') {
+        chrome.notifications.clear(notificationId);
+        openBattlelogHomeInTab(true);
+      }
     });
     // notification button(s) action
     chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
-      switch (buttonIndex) {
-        case 0:
-          chrome.notifications.clear('showNotificationUpdates');
-          openBattlelogUpdatesInTab();
-          break;
+      if (notificationId == 'showNotificationUpdates') {
+        switch (buttonIndex) {
+          case 0:
+            chrome.notifications.clear(notificationId);
+            openBattlelogUpdatesInTab();
+            break;
+        }
       }
     });
   }
