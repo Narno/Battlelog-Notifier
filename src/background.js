@@ -87,7 +87,7 @@
               if (localStorage.getItem('countOnline') !== null) {
                 var friendsOnlineCountPrev = localStorage.getItem('countOnline');
                 if (friendsOnlineCount > friendsOnlineCountPrev) {
-                  renderFriendsNotification(friendsOnlineCount.toString(), chrome.i18n.getMessage('statusOnline'));
+                  renderFriendsNotification((friendsOnlineCount - friendsIngameCount).toString(), chrome.i18n.getMessage('statusOnline'));
                 }
               }
               if (friendsOnlineCount > 0) {
