@@ -172,21 +172,21 @@
         switch(status) {
           case 'ingame':
             color = colorIngame;
-            if (Settings.storage.get('iconShowIngame') == 'false') {
+            if (!Settings.storage.get('iconShowIngame')) {
               count = '0';
               badgeText = false;
             }
             break;
           case 'online':
             color = colorOnline;
-            if (Settings.storage.get('iconShowOnline') == 'false') {
+            if (!Settings.storage.get('iconShowOnline')) {
               count = '0';
               badgeText = false;
             }
             break;
           case 'offline':
             color = colorOffline;
-            if (Settings.storage.get('iconShowOffline') == 'false') {
+            if (!Settings.storage.get('iconShowOffline')) {
               count = '0';
               badgeText = false;
             }
@@ -205,10 +205,10 @@
 
   function showNotificationUpdates() {
     var sound = false;
-    if (!chrome.notifications || Settings.storage.get('notifUpdatesIsActivated') != 'true') {
+    if (!chrome.notifications || !Settings.storage.get('notifUpdatesIsActivated')) {
       return;
     }
-    if (Settings.storage.get('notifUpdatesIsSound') == 'true') {
+    if (Settings.storage.get('notifUpdatesIsSound')) {
       sound = true;
     }
     new NotificationsCount(function (count) {
@@ -378,7 +378,7 @@
 
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
-  if (Settings.storage.get('notifUpdatesIsActivated') == 'true' && Settings.storage.get('notifUpdatesFrequency')) {
+  if (Settings.storage.get('notifUpdatesIsActivated') && Settings.storage.get('notifUpdatesFrequency')) {
     chrome.alarms.create('notification', {periodInMinutes: parseInt(Settings.storage.get('notifUpdatesFrequency'))});
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
@@ -450,9 +450,10 @@
         if (!chrome.notifications) {
           return;
         }
-        if (Settings.storage.get('notifUpdatesIsSound') == 'true') {
+        if (Settings.storage.get('notifUpdatesIsSound')) {
           sound = true;
         }
+        console.log('sound? ' + sound);
         renderUpdatesNotification(Math.floor((Math.random()*10)+1), sound);
         break;
       case 'show_friends_notification_test':
