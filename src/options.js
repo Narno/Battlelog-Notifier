@@ -37,6 +37,38 @@
     var successMessage = document.getElementById('success_message');
     var successTimeout = null;
 
+    // Settings
+    // @too should move
+    var Settings = (function () {
+      var defaults = {
+        game: 'bf4',
+        iconShowOffline: false,
+        iconShowOnline: true,
+        iconShowIngame: true,
+        notifUpdatesIsActivated: false,
+        notifUpdatesFrequency: 5,
+        notifUpdatesIsSound: true,
+        notifFriendsIsActivated: false,
+      };
+
+      var settings = {
+        storage: {
+          get: function (name) {
+            var item = localStorage.getItem(name);
+            if (item === null) {
+              return ({}.hasOwnProperty.call(defaults, name) ? defaults[name] : void 0);
+            } else if (item === 'true' || item === 'false') {
+              return (item === 'true');
+            }
+            return item;
+          },
+          set: localStorage.setItem.bind(localStorage)
+        }
+      };
+
+      return settings;
+    })();
+
     // Apply translations
     function applyTranslations() {
       var objects = document.getElementsByTagName('*'), i;
@@ -50,74 +82,29 @@
 
     // Laod options
     function loadOptions() {
-      // game
-      if (localStorage.getItem('game') === null) {
-        inputGame.value = 'bf4';
-      } else {
-        inputGame.value = localStorage.getItem('game');
-      }
-      // bgPermission
-      if (localStorage.getItem('bgPermission') === null) {
-        inputBgPermission.checked = false;
-      } else {
-        inputBgPermission.checked = (localStorage.getItem('bgPermission') === 'true');
-      }
-      // iconShowOffline
-      if (localStorage.getItem('iconShowOffline') === null) {
-        inputIconShowOffline.checked = false;
-      } else {
-        inputIconShowOffline.checked = (localStorage.getItem('iconShowOffline') === 'true');
-      }
-      // iconShowOnline
-      if (localStorage.getItem('iconShowOnline') === null) {
-        inputIconShowOnline.checked = true;
-      } else {
-        inputIconShowOnline.checked = (localStorage.getItem('iconShowOnline') === 'true');
-      }
-      // iconShowIngame
-      if (localStorage.getItem('iconShowIngame') === null) {
-        inputIconShowIngame.checked = true;
-      } else {
-        inputIconShowIngame.checked = (localStorage.getItem('iconShowIngame') === 'true');
-      }
-      // notifUpdatesIsActivated
-      if (localStorage.getItem('notifUpdatesIsActivated') === null) {
-        inputNotifUpdatesIsActivated.checked = false;
-      } else {
-        inputNotifUpdatesIsActivated.checked = (localStorage.getItem('notifUpdatesIsActivated') === 'true');
-      }
-      // notifUpdatesFrequency
-      if (localStorage.getItem('notifUpdatesFrequency') === null) {
-        inputNotifUpdatesFrequency.value = '1';
-      } else {
-        inputNotifUpdatesFrequency.value = localStorage.getItem('notifUpdatesFrequency');
-      }
-      // notifUpdatesIsSound
-      if (localStorage.getItem('notifUpdatesIsSound') === null) {
-        inputNotifUpdatesIsSound.checked = true;
-      } else {
-        inputNotifUpdatesIsSound.checked = (localStorage.getItem('notifUpdatesIsSound') === 'true');
-      }
-      // notifFriendsIsActivated
-      if (localStorage.getItem('notifFriendsIsActivated') === null) {
-        inputNotifFriendsIsActivated.checked = false;
-      } else {
-        inputNotifFriendsIsActivated.checked = (localStorage.getItem('notifFriendsIsActivated') === 'true');
-      }
+      inputGame.value = Settings.storage.get('game');
+      inputBgPermission.checked = Settings.storage.get('bgPermission');
+      inputIconShowOffline.checked = Settings.storage.get('iconShowOffline');
+      inputIconShowOnline.checked = Settings.storage.get('iconShowOnline');
+      inputIconShowIngame.checked = Settings.storage.get('iconShowIngame');
+      inputNotifUpdatesIsActivated.checked = Settings.storage.get('notifUpdatesIsActivated');
+      inputNotifUpdatesFrequency.value = Settings.storage.get('notifUpdatesFrequency');
+      inputNotifUpdatesIsSound.checked = Settings.storage.get('notifUpdatesIsSound');
+      inputNotifFriendsIsActivated.checked = Settings.storage.get('notifFriendsIsActivated');
     }
     loadOptions();
 
     // Save options
     function saveOptions() {
-      localStorage.setItem('game', inputGame.value);
-      localStorage.setItem('bgPermission', inputBgPermission.checked);
-      localStorage.setItem('iconShowOffline', inputIconShowOffline.checked);
-      localStorage.setItem('iconShowOnline', inputIconShowOnline.checked);
-      localStorage.setItem('iconShowIngame', inputIconShowIngame.checked);
-      localStorage.setItem('notifUpdatesIsActivated', inputNotifUpdatesIsActivated.checked);
-      localStorage.setItem('notifUpdatesFrequency', inputNotifUpdatesFrequency.value);
-      localStorage.setItem('notifUpdatesIsSound', inputNotifUpdatesIsSound.checked);
-      localStorage.setItem('notifFriendsIsActivated', inputNotifFriendsIsActivated.checked);
+      Settings.storage.set('game', inputGame.value);
+      Settings.storage.set('bgPermission', inputBgPermission.checked);
+      Settings.storage.set('iconShowOffline', inputIconShowOffline.checked);
+      Settings.storage.set('iconShowOnline', inputIconShowOnline.checked);
+      Settings.storage.set('iconShowIngame', inputIconShowIngame.checked);
+      Settings.storage.set('notifUpdatesIsActivated', inputNotifUpdatesIsActivated.checked);
+      Settings.storage.set('notifUpdatesFrequency', inputNotifUpdatesFrequency.value);
+      Settings.storage.set('notifUpdatesIsSound', inputNotifUpdatesIsSound.checked);
+      Settings.storage.set('notifFriendsIsActivated', inputNotifFriendsIsActivated.checked);
       // success message
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');

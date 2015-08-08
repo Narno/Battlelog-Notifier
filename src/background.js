@@ -26,9 +26,41 @@
    * Main functions
    */
 
+  // Settings
+  // @too should move
+  var Settings = (function () {
+    var defaults = {
+      game: 'bf4',
+      iconShowOffline: false,
+      iconShowOnline: true,
+      iconShowIngame: true,
+      notifUpdatesIsActivated: false,
+      notifUpdatesFrequency: 5,
+      notifUpdatesIsSound: true,
+      notifFriendsIsActivated: false,
+    };
+
+    var settings = {
+      storage: {
+        get: function (name) {
+          var item = localStorage.getItem(name);
+          if (item === null) {
+            return ({}.hasOwnProperty.call(defaults, name) ? defaults[name] : void 0);
+          } else if (item === 'true' || item === 'false') {
+            return (item === 'true');
+          }
+          return item;
+        },
+        set: localStorage.setItem.bind(localStorage)
+      }
+    };
+
+    return settings;
+  })();
+
   // Friends count function
   window.FriendsCount = function (callback) {
-    xhr('GET', getFriendsUrlJson(localStorage.game), function (data) {
+    xhr('GET', getFriendsUrlJson(Settings.storage.get('game')), function (data) {
       var key;
       var friendsCount = 0;
       var friendsOnlineCount = 0;
@@ -74,24 +106,24 @@
             }
             // desktop notification
             // @todo move code
-            if (localStorage.notifFriendsIsActivated) {
-              if (localStorage.getItem('countIngame') !== null) {
-                var friendsIngameCountPrev = localStorage.getItem('countIngame');
+            if (Settings.storage.get('notifFriendsIsActivated')) {
+              if (Settings.storage.get('countIngame') !== null) {
+                var friendsIngameCountPrev = Settings.storage.get('countIngame');
                 if (friendsIngameCount > friendsIngameCountPrev) {
                   renderFriendsNotification(friendsIngameCount.toString(), chrome.i18n.getMessage('statusIngame'));
                 }
               }
               if (friendsIngameCount > 0) {
-                localStorage.setItem('countIngame', friendsIngameCount);
+                Settings.storage.set('countIngame', friendsIngameCount);
               }
-              if (localStorage.getItem('countOnline') !== null) {
-                var friendsOnlineCountPrev = localStorage.getItem('countOnline');
+              if (Settings.storage.get('countOnline') !== null) {
+                var friendsOnlineCountPrev = Settings.storage.get('countOnline');
                 if (friendsOnlineCount > friendsOnlineCountPrev) {
                   renderFriendsNotification((friendsOnlineCount - friendsIngameCount).toString(), chrome.i18n.getMessage('statusOnline'));
                 }
               }
               if (friendsOnlineCount > 0) {
-                localStorage.setItem('countOnline', friendsOnlineCount);
+                Settings.storage.set('countOnline', friendsOnlineCount);
               }
             }
             //
@@ -115,7 +147,7 @@
 
   // Notifications count function
   window.NotificationsCount = function (callback) {
-    xhr('GET', getNotificationsUrlJson(localStorage.game), function (data) {
+    xhr('GET', getNotificationsUrlJson(Settings.storage.get('game')), function (data) {
       var count = '0';
 
       if (data === false) {
@@ -140,21 +172,21 @@
         switch(status) {
           case 'ingame':
             color = colorIngame;
-            if (localStorage.iconShowIngame == 'false') {
+            if (Settings.storage.get('iconShowIngame') == 'false') {
               count = '0';
               badgeText = false;
             }
             break;
           case 'online':
             color = colorOnline;
-            if (localStorage.iconShowOnline == 'false') {
+            if (Settings.storage.get('iconShowOnline') == 'false') {
               count = '0';
               badgeText = false;
             }
             break;
           case 'offline':
             color = colorOffline;
-            if (localStorage.iconShowOffline == 'false') {
+            if (Settings.storage.get('iconShowOffline') == 'false') {
               count = '0';
               badgeText = false;
             }
@@ -173,10 +205,10 @@
 
   function showNotificationUpdates() {
     var sound = false;
-    if (!chrome.notifications || localStorage.notifUpdatesIsActivated != 'true') {
+    if (!chrome.notifications || Settings.storage.get('notifUpdatesIsActivated') != 'true') {
       return;
     }
-    if (localStorage.notifUpdatesIsSound == 'true') {
+    if (Settings.storage.get('notifUpdatesIsSound') == 'true') {
       sound = true;
     }
     new NotificationsCount(function (count) {
@@ -287,11 +319,11 @@
   }
 
   function isBattlelogUrl(url) {
-    return url.indexOf(getHomeUrl(localStorage.game)) === 0;
+    return url.indexOf(getHomeUrl(Settings.storage.get('game'))) === 0;
   }
 
   function isBattlelogUpdatesUrl(url) {
-    return url.indexOf(getUpdateUrl(localStorage.game)) === 0;
+    return url.indexOf(getUpdateUrl(Settings.storage.get('game'))) === 0;
   }
 
   function openBattlelogHomeInTab(flag) {
@@ -307,7 +339,7 @@
           return;
         }
       }
-      chrome.tabs.create({url: getHomeUrl(localStorage.game)}, function(tab) {
+      chrome.tabs.create({url: getHomeUrl(Settings.storage.get('game'))}, function(tab) {
         if (flag) {
           clickOnFlag();
         }
@@ -324,7 +356,7 @@
           return;
         }
       }
-      chrome.tabs.create({url: getUpdateUrl(localStorage.game)});
+      chrome.tabs.create({url: getUpdateUrl(Settings.storage.get('game'))});
     });
   }
 
@@ -346,8 +378,8 @@
 
   // alarms
   chrome.alarms.create('badge', {periodInMinutes: 1});
-  if (localStorage.notifUpdatesIsActivated == 'true' && localStorage.notifUpdatesFrequency) {
-    chrome.alarms.create('notification', {periodInMinutes: parseInt(localStorage.notifUpdatesFrequency)});
+  if (Settings.storage.get('notifUpdatesIsActivated') == 'true' && Settings.storage.get('notifUpdatesFrequency')) {
+    chrome.alarms.create('notification', {periodInMinutes: parseInt(Settings.storage.get('notifUpdatesFrequency'))});
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
     if (alarm.name == 'badge') {
@@ -397,15 +429,6 @@
     var manifest = chrome.runtime.getManifest();
     if (details.reason == 'install') {
       console.log(manifest.name + " first install (v" + manifest.version + ")");
-      // Initialize options
-      localStorage.game = 'bf4';
-      localStorage.iconShowOffline = false;
-      localStorage.iconShowOnline = true;
-      localStorage.iconShowIngame = true;
-      localStorage.notifUpdatesIsActivated = false;
-      localStorage.notifUpdatesFrequency = 5;
-      localStorage.notifUpdatesIsSound = true;
-      localStorage.notifFriendsIsActivated = false;
     } else if (details.reason == 'update') {
       console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
     }
@@ -427,7 +450,7 @@
         if (!chrome.notifications) {
           return;
         }
-        if (localStorage.notifUpdatesIsSound == 'true') {
+        if (Settings.storage.get('notifUpdatesIsSound') == 'true') {
           sound = true;
         }
         renderUpdatesNotification(Math.floor((Math.random()*10)+1), sound);
