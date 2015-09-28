@@ -427,13 +427,15 @@
   // check whether new version is installed
   chrome.runtime.onInstalled.addListener(function (details) {
     var manifest = chrome.runtime.getManifest();
-    if (details.reason == 'install') {
-      console.log(manifest.name + " first install (v" + manifest.version + ")");
-    } else if (details.reason == 'update') {
-      console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
+    switch (details.reason) {
+      case 'install':
+        console.log(manifest.name + " first install (v" + manifest.version + ")");
+        chrome.tabs.create({url: chrome.extension.getURL('options.html')});
+      case 'update':
+        console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
+      default:
+        chrome.runtime.sendMessage({do: 'update_badge'});
     }
-    chrome.runtime.sendMessage({do: 'update_badge'});
-    chrome.tabs.create({url: chrome.extension.getURL('options.html')});
   });
 
   // on message update badge
