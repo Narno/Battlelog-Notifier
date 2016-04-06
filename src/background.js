@@ -377,13 +377,13 @@
    */
 
   // alarms
-  chrome.alarms.create('badge', {periodInMinutes: 1});
+  chrome.alarms.create('badge', {delayInMinutes: 1, periodInMinutes: 1});
   if (Settings.storage.get('notifUpdatesIsActivated') && Settings.storage.get('notifUpdatesFrequency')) {
-    chrome.alarms.create('notification', {periodInMinutes: parseInt(Settings.storage.get('notifUpdatesFrequency'))});
+    chrome.alarms.create('notification', {delayInMinutes: 1, periodInMinutes: parseInt(Settings.storage.get('notifUpdatesFrequency'))});
   }
   chrome.alarms.onAlarm.addListener(function (alarm) {
     if (alarm.name == 'badge') {
-      chrome.runtime.sendMessage({do: 'update_badge'});
+      updateBadge();
     }
     if (alarm.name == 'notification') {
       showNotificationUpdates();
@@ -392,8 +392,8 @@
 
   // browser action
   chrome.browserAction.onClicked.addListener(function () {
-    chrome.runtime.sendMessage({do: 'update_badge'});
-    chrome.runtime.sendMessage({do: 'show_updates_notification'});
+    updateBadge();
+    showNotificationUpdates();
     openBattlelogHomeInTab();
   });
 
@@ -434,7 +434,7 @@
       case 'update':
         console.log(manifest.name + " updated from v" + details.previousVersion + " to v" + manifest.version);
       default:
-        chrome.runtime.sendMessage({do: 'update_badge'});
+        updateBadge();
     }
   });
 
