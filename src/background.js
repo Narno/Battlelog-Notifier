@@ -331,7 +331,7 @@
     chrome.tabs.getAllInWindow(undefined, function(tabs) {
       for (var i = 0, tab; tab = tabs[i]; i++) {
         if (tab.url && isBattlelogUrl(tab.url)) {
-          chrome.tabs.update(tab.id, {selected: true}, function(tab) {
+          chrome.tabs.update(tab.id, {highlighted: true}, function(tab) {
             if (flag) {
               clickOnFlag();
             }
