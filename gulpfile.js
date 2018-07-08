@@ -10,7 +10,6 @@ var gulp = require('gulp'),
     minifycss = require('gulp-minify-css'),
     jshint = require('gulp-jshint'),
     stripdebug = require('gulp-strip-debug'),
-    uglify = require('gulp-uglify'),
     zip = require('gulp-zip'),
     crx = require('gulp-crx');
 
@@ -47,13 +46,11 @@ gulp.task('jshint', function() {
 });
 
 // copy vendor scripts
-// and uglify all other scripts
 gulp.task('scripts', ['jshint'], function() {
     gulp.src('src/vendor/**/*.js')
         .pipe(gulp.dest('build/vendor'));
     return gulp.src(['src/*.js', '!src/vendor/**/*.js'])
         .pipe(stripdebug())
-        .pipe(uglify())
         .pipe(gulp.dest('build'));
 });
 
