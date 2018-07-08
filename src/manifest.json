@@ -1,7 +1,7 @@
 {
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "homepage_url": "https://github.com/Narno/Battlelog-Notifier",
   "author": "Arnaud Ligny",
   "developer": {
@@ -20,9 +20,6 @@
     "tabs",
     "notifications",
     "*://battlelog.battlefield.com/*"
-  ],
-  "optional_permissions": [
-    "background"
   ],
   "browser_action": {
     "default_icon": "icon-19.png"
