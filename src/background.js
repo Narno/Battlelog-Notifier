@@ -5,31 +5,48 @@
    * Config
    */
 
-  var BASE_URL = 'http://battlelog.battlefield.com/';
-  var UPDATES_PATH = 'updates/';
-  var COMCENTER_PATH = 'comcenter/sync/';
-  var NOTIFICATIONS_PATH = 'updates/loadNotifications/';
-  var colorOffline = [63, 59, 61, 255];
-  var colorOnline  = [120, 199, 83, 255];
-  var colorIngame  = [96, 192, 246, 255];
-  var soundBleep = 'UI_Bleep_Notification.ogg';
+  const BASE_URL = 'http://battlelog.battlefield.com/';
+  const UPDATES_PATH = 'updates/';
+  const COMCENTER_PATH = 'comcenter/sync/';
+  const NOTIFICATIONS_PATH = 'updates/loadNotifications/';
+  const colorOffline = [63, 59, 61, 255];
+  const colorOnline = [120, 199, 83, 255];
+  const colorIngame = [96, 192, 246, 255];
+  const soundBleep = 'UI_Bleep_Notification.ogg';
   // Test
-  var BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/master/test/fixtures/';
-  var COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
-  var COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
-  var NOTIFICATIONS_PATH_TEST_3 = 'updates/loadNotifications/3.json';
-  //var BASE_URL = BASE_URL_TEST;
-  //var COMCENTER_PATH = COMCENTER_PATH_TEST_INGAME;
-  //var NOTIFICATIONS_PATH = NOTIFICATIONS_PATH_TEST_3;
+  /**
+   * const BASE_URL_TEST = 'https://raw.githubusercontent.com/Narno/Battlelog-Notifier/master/test/fixtures/';
+   * const COMCENTER_PATH_TEST_ONLINE = 'comcenter/sync/online.json';
+   * const COMCENTER_PATH_TEST_INGAME = 'comcenter/sync/ingame.json';
+   * const NOTIFICATIONS_PATH_TEST_3 = 'updates/loadNotifications/3.json';
+   */
 
   /**
    * Main functions
    */
 
+  // XHR helper function
+  const xhr = (() => {
+    const xhr = new XMLHttpRequest();
+    return function (method, url, callback) {
+      xhr.onreadystatechange = () => {
+        // Request finished and response is ready
+        if (xhr.readyState === 4) {
+          if (xhr.status !== 200) {
+            callback(false);
+          }
+          callback(xhr.responseText);
+        }
+      };
+      xhr.open(method, url);
+      xhr.send();
+    };
+  })();
+
   // Settings
-  // @too should move
-  var Settings = (function () {
-    var defaults = {
+  // @todo should move
+  const Settings = (() => {
+    const defaults = {
       game: 'bf4',
       iconShowOffline: false,
       iconShowOnline: true,
@@ -37,16 +54,17 @@
       notifUpdatesIsActivated: false,
       notifUpdatesFrequency: 5,
       notifUpdatesIsSound: true,
-      notifFriendsIsActivated: false,
+      notifFriendsIsActivated: false
     };
 
-    var settings = {
+    const settings = {
       storage: {
-        get: function (name) {
-          var item = localStorage.getItem(name);
+        get: name => {
+          const item = localStorage.getItem(name);
           if (item === null) {
-            return ({}.hasOwnProperty.call(defaults, name) ? defaults[name] : void 0);
-          } else if (item === 'true' || item === 'false') {
+            return ({}.hasOwnProperty.call(defaults, name) ? defaults[name] : 0);
+          }
+          if (item === 'true' || item === 'false') {
             return (item === 'true');
           }
           return item;
@@ -59,27 +77,27 @@
   })();
 
   // Friends count function
-  window.FriendsCount = function (callback) {
-    xhr('GET', getFriendsUrlJson(Settings.storage.get('game')), function (data) {
-      var key;
-      var friendsCount = 0;
-      var friendsOnlineCount = 0;
-      var friendsIngameCount = 0;
-      var count = '0';
-      var status;
-      var statusLabel;
+  window.FriendsCount = callback => {
+    xhr('GET', getFriendsUrlJson(Settings.storage.get('game')), data => {
+      let key;
+      let friendsCount = 0;
+      let friendsOnlineCount = 0;
+      let friendsIngameCount = 0;
+      let count = '0';
+      let status;
+      let statusLabel;
 
       if (data === false) {
         callback(false);
       }
 
       try {
-        var json = JSON.parse(data);
-        if (json.type == 'success') {
+        const json = JSON.parse(data);
+        if (json.type === 'success') {
           if (json.data.originavailable) {
-            // count friends
-            for(key in json.data.friendscomcenter) {
-              if(json.data.friendscomcenter.hasOwnProperty(key)) {
+            // Count friends
+            for (key in json.data.friendscomcenter) {
+              if (Object.prototype.hasOwnProperty.call(json.data.friendscomcenter, key)) {
                 friendsCount++;
                 if (json.data.friendscomcenter[key].presence.isOnline) {
                   friendsOnlineCount++;
@@ -104,11 +122,11 @@
                 statusLabel = chrome.i18n.getMessage('statusOffline');
               }
             }
-            // desktop notification
+            // Desktop notification
             // @todo move code
             if (Settings.storage.get('notifFriendsIsActivated')) {
               if (Settings.storage.get('countIngame') !== null) {
-                var friendsIngameCountPrev = Settings.storage.get('countIngame');
+                const friendsIngameCountPrev = Settings.storage.get('countIngame');
                 if (friendsIngameCount > friendsIngameCountPrev) {
                   renderFriendsNotification(friendsIngameCount.toString(), chrome.i18n.getMessage('statusIngame'));
                 }
@@ -117,7 +135,7 @@
                 Settings.storage.set('countIngame', friendsIngameCount);
               }
               if (Settings.storage.get('countOnline') !== null) {
-                var friendsOnlineCountPrev = Settings.storage.get('countOnline');
+                const friendsOnlineCountPrev = Settings.storage.get('countOnline');
                 if (friendsOnlineCount > friendsOnlineCountPrev) {
                   renderFriendsNotification((friendsOnlineCount - friendsIngameCount).toString(), chrome.i18n.getMessage('statusOnline'));
                 }
@@ -138,24 +156,23 @@
           callback(false);
         }
       } catch (e) {
-        console.error("Parsing error:", e);
+        console.error('Parsing error:', e);
         callback(false);
-        return;
       }
     });
   };
 
   // Notifications count function
-  window.NotificationsCount = function (callback) {
-    xhr('GET', getNotificationsUrlJson(Settings.storage.get('game')), function (data) {
-      var count = '0';
+  window.NotificationsCount = callback => {
+    xhr('GET', getNotificationsUrlJson(Settings.storage.get('game')), data => {
+      let count = '0';
 
       if (data === false) {
         callback(false);
       }
 
-      var json = JSON.parse(data);
-      if (json.type == 'success') {
+      const json = JSON.parse(data);
+      if (json.type === 'success') {
         count = json.data.numUnread.toString();
         callback(count);
       } else {
@@ -164,10 +181,11 @@
     });
   };
 
-  // update badge
+  // Update badge
   function updateBadge() {
-    var color, badgeText = true;
-    new FriendsCount(function (count, status, statusLabel) {
+    let color;
+    let badgeText = true;
+    let FriendsCount = new FriendsCount(function (count, status, statusLabel) {
       if (count !== false) {
         switch(status) {
           case 'ingame':
@@ -221,24 +239,6 @@
   /**
    * Helpers
    */
-
-  // XHR helper function
-  var xhr = function () {
-    var xhr = new XMLHttpRequest();
-    return function(method, url, callback) {
-      xhr.onreadystatechange = function () {
-        // request finished and response is ready
-        if (xhr.readyState === 4) {
-          if (xhr.status !== 200) {
-            callback(false);
-          }
-          callback(xhr.responseText);
-        }
-      };
-      xhr.open(method, url);
-      xhr.send();
-    };
-  }();
 
   function getHomeUrl(game) {
     return BASE_URL + game + '/';
@@ -368,7 +368,7 @@
       chrome.tabs.executeScript({
         code: "$('#updates-icon').click();",
         runAt: 'document_end'
-      }); 
+      });
     });
   }
 

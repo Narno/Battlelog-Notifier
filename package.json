@@ -14,19 +14,37 @@
   },
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "xo",
+    "build": "node_modules/.bin/gulp dist"
   },
   "devDependencies": {
     "del": ">=1.2.0",
-    "gulp": ">=3.5.5",
+    "gulp": "^4.0.0",
     "gulp-cleanhtml": ">=0.0.2",
-    "gulp-crx": "git://github.com/PavelVanecek/gulp-crx#v0.1.0",
+    "gulp-crx": "git://github.com/PavelVanecek/gulp-crx.git#v0.1.0",
     "gulp-jshint": ">=2.0.0",
     "gulp-minify-css": ">=0.3.0",
     "gulp-strip-debug": ">=0.3.0",
     "gulp-uglify": ">=0.2.1",
     "gulp-zip": ">0.1.2",
     "jshint": "^2.9.1",
-    "vinyl-paths": ">=1.0.0"
+    "vinyl-paths": ">=1.0.0",
+    "xo": "^0.21.1"
+  },
+  "xo": {
+    "space": true,
+    "envs": [
+      "browser",
+      "webextensions",
+      "jquery"
+    ],
+    "rules": {
+      "import/no-unassigned-import": 0,
+      "no-lonely-if": "off",
+      "max": 7
+    },
+    "ignores": [
+      "build/**"
+    ]
   }
 }

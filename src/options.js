@@ -2,45 +2,45 @@
   'use strict';
 
   // DOM / CSS handling with zeptojs
-  $(function() {
-    $('.menu a').click(function(ev) {
+  $(() => {
+    $('.menu a').click(ev => {
       ev.preventDefault();
-      var selected = 'selected';
+      const selected = 'selected';
       $('.mainview > *').removeClass(selected);
       $('.menu li').removeClass(selected);
-      setTimeout(function() {
+      setTimeout(() => {
         $('.mainview > *:not(.selected)').css('display', 'none');
       }, 100);
       $(ev.currentTarget).parent().addClass(selected);
-      var currentView = $($(ev.currentTarget).attr('href'));
+      const currentView = $($(ev.currentTarget).attr('href'));
       currentView.css('display', 'block');
-      setTimeout(function() {
+      setTimeout(() => {
         currentView.addClass(selected);
       }, 0);
-      setTimeout(function() {
+      setTimeout(() => {
         $('body')[0].scrollTop = 0;
       }, 200);
     });
     $('.mainview > *:not(.selected)').css('display', 'none');
   });
 
-  document.addEventListener('DOMContentLoaded', function () {
-    var inputGame = document.getElementById('game');
-    var inputBgPermission = document.getElementById('bgPermission');
-    var inputIconShowOffline = document.getElementById('iconShowOffline');
-    var inputIconShowOnline = document.getElementById('iconShowOnline');
-    var inputIconShowIngame = document.getElementById('iconShowIngame');
-    var inputNotifUpdatesIsActivated = document.getElementById('notifUpdatesIsActivated');
-    var inputNotifUpdatesFrequency = document.getElementById('notifUpdatesFrequency');
-    var inputNotifUpdatesIsSound = document.getElementById('notifUpdatesIsSound');
-    var inputNotifFriendsIsActivated = document.getElementById('notifFriendsIsActivated');
-    var successMessage = document.getElementById('success_message');
-    var successTimeout = null;
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputGame = document.getElementById('game');
+    const inputBgPermission = document.getElementById('bgPermission');
+    const inputIconShowOffline = document.getElementById('iconShowOffline');
+    const inputIconShowOnline = document.getElementById('iconShowOnline');
+    const inputIconShowIngame = document.getElementById('iconShowIngame');
+    const inputNotifUpdatesIsActivated = document.getElementById('notifUpdatesIsActivated');
+    const inputNotifUpdatesFrequency = document.getElementById('notifUpdatesFrequency');
+    const inputNotifUpdatesIsSound = document.getElementById('notifUpdatesIsSound');
+    const inputNotifFriendsIsActivated = document.getElementById('notifFriendsIsActivated');
+    const successMessage = document.getElementById('success_message');
+    let successTimeout = null;
 
     // Settings
-    // @too should move
-    var Settings = (function () {
-      var defaults = {
+    // @todo should move
+    const Settings = (() => {
+      const defaults = {
         game: 'bf4',
         iconShowOffline: false,
         iconShowOnline: true,
@@ -48,16 +48,17 @@
         notifUpdatesIsActivated: false,
         notifUpdatesFrequency: 5,
         notifUpdatesIsSound: true,
-        notifFriendsIsActivated: false,
+        notifFriendsIsActivated: false
       };
 
-      var settings = {
+      const settings = {
         storage: {
-          get: function (name) {
-            var item = localStorage.getItem(name);
+          get: name => {
+            const item = localStorage.getItem(name);
             if (item === null) {
-              return ({}.hasOwnProperty.call(defaults, name) ? defaults[name] : void 0);
-            } else if (item === 'true' || item === 'false') {
+              return ({}.hasOwnProperty.call(defaults, name) ? defaults[name] : 0);
+            }
+            if (item === 'true' || item === 'false') {
               return (item === 'true');
             }
             return item;
@@ -71,7 +72,8 @@
 
     // Apply translations
     function applyTranslations() {
-      var objects = document.getElementsByTagName('*'), i;
+      const objects = document.getElementsByTagName('*');
+      let i;
       for (i = 0; i < objects.length; i++) {
         if (objects[i].dataset && objects[i].dataset.message) {
           objects[i].innerHTML = chrome.i18n.getMessage(objects[i].dataset.message);
@@ -105,105 +107,69 @@
       Settings.storage.set('notifUpdatesFrequency', inputNotifUpdatesFrequency.value);
       Settings.storage.set('notifUpdatesIsSound', inputNotifUpdatesIsSound.checked);
       Settings.storage.set('notifFriendsIsActivated', inputNotifFriendsIsActivated.checked);
-      // success message
+      // Success message
       clearTimeout(successTimeout);
       successMessage.classList.add('visible');
-      successTimeout = setTimeout(function() {
+      successTimeout = setTimeout(() => {
         successMessage.classList.remove('visible');
       }, 2000);
     }
-    document.getElementById('game').addEventListener('change', function () {
+    document.getElementById('game').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'update_badge'});
     });
-    document.getElementById('bgPermission').addEventListener('change', function () {
-      var permission = {'permissions': ['background']};
-      /*
-      chrome.permissions.contains(permission, function(result) {
-        if (result) {
-          alert('granted');
-        } else {
-          alert('not granted');
-        }
-      });
-      */
-      if (inputBgPermission.checked) {
-        chrome.permissions.request(permission, function(granted) {
-          /*
-          if (granted) {
-            alert('granted');
-          } else {
-            alert('not granted');
-          }
-          */
-        });
-      } else {
-        chrome.permissions.remove(permission, function(removed) {
-          /*
-          if (removed) {
-            alert('removed');
-          } else {
-            alert('not removed');
-          }
-          */
-        });
-      }
-      saveOptions();
-    });
-    document.getElementById('iconShowOffline').addEventListener('change', function () {
+    document.getElementById('iconShowOffline').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'update_badge'});
     });
-    document.getElementById('iconShowOnline').addEventListener('change', function () {
+    document.getElementById('iconShowOnline').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'update_badge'});
     });
-    document.getElementById('iconShowIngame').addEventListener('change', function () {
+    document.getElementById('iconShowIngame').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'update_badge'});
     });
-    document.getElementById('notifUpdatesIsActivated').addEventListener('change', function () {
+    document.getElementById('notifUpdatesIsActivated').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'show_updates_notification'});
     });
-    document.getElementById('notifUpdatesFrequency').addEventListener('change', function () {
+    document.getElementById('notifUpdatesFrequency').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'show_updates_notification'});
     });
-    document.getElementById('notifUpdatesIsSound').addEventListener('change', function () {
+    document.getElementById('notifUpdatesIsSound').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'show_updates_notification'});
     });
-    document.getElementById('notifFriendsIsActivated').addEventListener('change', function () {
+    document.getElementById('notifFriendsIsActivated').addEventListener('change', () => {
       saveOptions();
       chrome.runtime.sendMessage({do: 'update_badge'});
     });
 
     // Updates notification test
-    document.getElementById('notifUpdatesTest').addEventListener('click', function () {
+    document.getElementById('notifUpdatesTest').addEventListener('click', () => {
       if (chrome.notifications) {
         chrome.runtime.sendMessage({do: 'show_updates_notification_test'});
-        return;
       }
     });
     // Friends notification test
-    document.getElementById('notifFriendsTest').addEventListener('click', function () {
+    document.getElementById('notifFriendsTest').addEventListener('click', () => {
       if (chrome.notifications) {
         chrome.runtime.sendMessage({do: 'show_friends_notification_test'});
-        return;
       }
     });
 
     // Hide notifications options if not available
     if (!chrome.notifications) {
-      $(function() {
+      $(() => {
         $('#li_notifications').css('display', 'none');
       });
     }
 
     // Extension version in about page
-    var manifest = chrome.runtime.getManifest();
-    $(function() {
+    const manifest = chrome.runtime.getManifest();
+    $(() => {
       $('#version').html(manifest.version);
     });
   });
