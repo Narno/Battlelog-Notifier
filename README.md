@@ -1,4 +1,4 @@
-# Battlelog Notifier
+# Battlelog-Notifier
 
 > Browser extension that displays the count of your [Battlelog](http://battlelog.battlefield.com) friends, by status: in game, online or offline.
 
